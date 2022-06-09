@@ -1,14 +1,14 @@
 <h1 align="center">
   <br>
-  <img src="!Documentation/monocleLogoRoundedSquare.png" alt="monocle" width="200">
+  <img src="!Documentation/piggyBACKLogo.png" alt="piggyBACK" width="200">
   <br>
 </h1>
 
-<h3 align="center">A view extension for <a href="http://dynamobim.org/" target="_blank">Dynamo</a>.</h4>
+<h3 align="center">A plugin for Revit to help manage Dynamo packages.</h3>
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/johnpierson/monoclefordynamo?include_prereleases)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/johnpierson/MonocleForDynamo/graphs/commit-activity)
-[![GitHub license](https://img.shields.io/github/license/johnpierson/MonocleForDynamo)](https://github.com/johnpierson/MonocleForDynamo/blob/master/LICENSE)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/johnpierson/piggyBACK?include_prereleases)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/johnpierson/piggyBACK/graphs/commit-activity)
+[![GitHub license](https://img.shields.io/github/license/johnpierson/piggyBACK)](https://github.com/johnpierson/piggyBACK/blob/master/LICENSE)
 
 
 If you appreciate the work put into this free package, please vote in support of it on Dynamo's package manager. 
