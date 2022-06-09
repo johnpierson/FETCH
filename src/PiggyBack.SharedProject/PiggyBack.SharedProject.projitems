@@ -9,6 +9,12 @@
     <Import_RootNamespace>PiggyBack</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\Commands.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileDownloader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\Utilities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)PiggyBack-debug.addin" />
   </ItemGroup>
 </Project>
