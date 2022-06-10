@@ -48,12 +48,12 @@ procedure AddCustomQueryPage();
 begin
   CustomQueryPage := CreateInputQueryPage(
     wpWelcome,
-    'Custom message',
-    'Custom description',
-    'Custom instructions');
+    'Welcome to FETCH',
+    'FETCH allows you to sync Dynamo packages (.zip) from a public Google Drive URL to your local folder.',
+    'Please paste the Google Drive URL here');
 
   { Add items (False means it's not a password edit) }
-  CustomQueryPage.Add('Custom Field:', False);
+  CustomQueryPage.Add('Link to ZIP file on Google Drive:', False);
 end;
 
 procedure InitializeWizard();
@@ -61,14 +61,7 @@ begin
   AddCustomQueryPage();
 end;
 
-procedure CurStepChanged(CurStep: TSetupStep);
-begin
-  if CurStep = ssPostInstall then
-  begin
-    { Read custom value }
-    MsgBox('Custom Value = ' + CustomQueryPage.Values[0], mbInformation, MB_OK);
-  end;
-end;
+
 
 function GetPackageExternalPath(Param: String): string;
 begin
