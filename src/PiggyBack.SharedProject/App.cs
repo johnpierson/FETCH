@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using Autodesk.Revit.UI;
 
@@ -15,14 +19,39 @@ namespace PiggyBack
                 return Result.Cancelled;
             }
 
-            Commands.Commands.DownloadPackages();
+            Globals.TaskbarManager = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
+            Globals.TaskbarManager.SetProgressValue(0, 3);
 
-            return Result.Succeeded;
+            if (FindDynamoVersions())
+            {
+                Commands.Commands.DownloadAndUnzipPackages();
+
+                return Result.Succeeded;
+            }
+
+            return Result.Failed;
         }
 
         public Result OnShutdown(UIControlledApplication application)
         {
             return Result.Succeeded;
         }
+
+        public bool FindDynamoVersions()
+        {
+            var dynamoRevit = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.FullName.Contains("DynamoRevitVersionSelector"));
+
+            if (dynamoRevit is null) return false;
+  
+
+            Globals.DynamoVersion = dynamoRevit.GetName().Version;
+            //now set the package path location
+            Globals.DefaultDynamoPackagePath =
+                $"{Globals.UserRoaming}\\Dynamo\\Dynamo Revit\\{Globals.DynamoVersion.Major}.{Globals.DynamoVersion.Minor}\\packages";
+
+            return true;
+        }
+
+      
     }
 }
