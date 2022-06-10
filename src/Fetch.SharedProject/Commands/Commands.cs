@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.IO.Packaging;
 using System.Text;
+using Fetch.Classes;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using UIFramework;
 
@@ -11,24 +12,32 @@ namespace Fetch.Commands
 {
     internal class Commands
     {
-        internal static string TestURl =
-            "https://drive.google.com/file/d/1O5kW_sThjwVK6BoAWZ3jBMFeOMggXXT_/view?usp=sharing";
+        internal static string TestURl = string.Empty;
 
         internal static string TestURl2 =
-            "https://parallaxteam-my.sharepoint.com/:u:/p/johnpierson/EXRLIhSfKZBAsTnP1BnzPPAB65Js2mZmeC721AhEpt7oVg?e=MdRg1H";
+            "https://drive.google.com/file/d/1O5kW_sThjwVK6BoAWZ3jBMFeOMggXXT_/view?usp=sharing";
 
         internal static string DownloadPath = Path.Combine(Globals.TempPath,$"{DateTime.Now:yyyyMMdd}_packages.zip");
 
         internal static TaskbarManager TaskbarManager;
+
+
+        public static void ReadINI()
+        {
+            var fetchIni = new FetchIniFile();
+            TestURl = fetchIni.Read("Path","Settings");
+        }
 
         /// <summary>
         /// Download package from google drive location and unzip into the default directory
         /// </summary>
         public static void DownloadAndUnzipPackages()
         {
+            ReadINI();
+
             FileDownloader fd = new FileDownloader();
             fd.DownloadFileCompleted += FdOnDownloadFileCompleted;
-            fd.DownloadFileAsync(TestURl, DownloadPath);
+            fd.DownloadFile(TestURl, DownloadPath);
         }
 
         private static void UnzipPackages()

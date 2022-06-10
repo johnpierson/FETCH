@@ -32,9 +32,11 @@ SolidCompression=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "D:\Repos\Fetch\Release\2023\Fetch.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion
-Source: "D:\Repos\Fetch\Release\2023\Microsoft.WindowsAPICodePack.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion
-Source: "D:\Repos\Fetch\Release\2023\Microsoft.WindowsAPICodePack.Shell.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion
+; Revit 2023
+Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin23}"; Flags: ignoreversion
+Source: "..\_Release\2023\Fetch.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion
+Source: "..\_Release\2023\Microsoft.WindowsAPICodePack.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion
+Source: "..\_Release\2023\Microsoft.WindowsAPICodePack.Shell.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [INI]

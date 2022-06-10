@@ -59,6 +59,9 @@
       <Version>1.1.2</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Fetch.addin" />
+  </ItemGroup>
   <Import Project="..\Fetch.SharedProject\Fetch.SharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -66,7 +69,7 @@
 if $(ConfigurationName) == Debug copy "$(ProjectDir)..\Fetch.SharedProject\Fetch-Debug.addin" "$(AppData)\Autodesk\REVIT\Addins\2023"
 if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)Fetch.dll" "$(AppData)\Autodesk\REVIT\Addins\2023"
 
-if $(ConfigurationName) == Release copy "$(ProjectDir)$(OutputPath)Fetch.dll" "$(ProjectDir)\..\..\..\_Release\Fetch\2023\Fetch.dll"
-if $(ConfigurationName) == Release copy "$(ProjectDir)\Fetch.addin" "$(ProjectDir)\..\..\..\_Release\Fetch\2023"</PostBuildEvent>
+if $(ConfigurationName) == Release copy "$(ProjectDir)$(OutputPath)Fetch.dll" "$(ProjectDir)..\..\_Release\2023"
+if $(ConfigurationName) == Release copy "$(ProjectDir)Fetch.addin" "$(ProjectDir)..\..\_Release"</PostBuildEvent>
   </PropertyGroup>
 </Project>
