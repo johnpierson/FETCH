@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="!Documentation/piggyBACKLogo.png" alt="piggyBACK" width="200">
+  <img src="!Documentation/FetchLogo.png" alt="FETCH" width="200">
   <br>
 </h1>
 
