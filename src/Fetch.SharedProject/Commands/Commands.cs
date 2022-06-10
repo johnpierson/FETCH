@@ -19,7 +19,7 @@ namespace Fetch.Commands
 
         internal static string DownloadPath = Path.Combine(Globals.TempPath,$"{DateTime.Now:yyyyMMdd}_packages.zip");
 
-        internal static TaskbarManager taskbarManager;
+        internal static TaskbarManager TaskbarManager;
 
         /// <summary>
         /// Download package from google drive location and unzip into the default directory
@@ -28,7 +28,7 @@ namespace Fetch.Commands
         {
             FileDownloader fd = new FileDownloader();
             fd.DownloadFileCompleted += FdOnDownloadFileCompleted;
-            fd.DownloadFile(TestURl, DownloadPath);
+            fd.DownloadFileAsync(TestURl, DownloadPath);
         }
 
         private static void UnzipPackages()
@@ -63,7 +63,7 @@ namespace Fetch.Commands
             {
                 Visible = true,
                 Icon = System.Drawing.SystemIcons.Information,
-                BalloonTipText = $"Packages synced for Dynamo {Globals.DynamoVersion}",
+                BalloonTipText = $"Packages fetched for Dynamo {Globals.DynamoVersion}",
                 BalloonTipTitle = "Fetch"
             };
 
@@ -85,7 +85,7 @@ namespace Fetch.Commands
 
         private static void PackageWatcherOnCreated(object sender, FileSystemEventArgs e)
         {
-            taskbarManager.SetProgressValue(10,100);
+            TaskbarManager.SetProgressValue(10,100);
         }
 
         #endregion
