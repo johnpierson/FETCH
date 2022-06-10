@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.WindowsAPICodePack.Taskbar;
 
-namespace PiggyBack
+namespace Fetch
 {
     internal class Globals
     {

@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using UIFramework;
 
-namespace PiggyBack.Commands
+namespace Fetch.Commands
 {
     internal class Commands
     {
@@ -61,7 +61,7 @@ namespace PiggyBack.Commands
                 Visible = true,
                 Icon = System.Drawing.SystemIcons.Information,
                 BalloonTipText = "Packages synced",
-                BalloonTipTitle = "piggyBACK"
+                BalloonTipTitle = "Fetch"
             };
 
             notification.ShowBalloonTip(1000);

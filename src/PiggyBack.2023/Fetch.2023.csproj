@@ -7,8 +7,8 @@
     <ProjectGuid>{6DEC72DB-6655-495E-BE15-2CDB73229785}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PiggyBack</RootNamespace>
-    <AssemblyName>PiggyBack</AssemblyName>
+    <RootNamespace>Fetch</RootNamespace>
+    <AssemblyName>Fetch</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -62,10 +62,10 @@
   <Import Project="..\PiggyBack.SharedProject\PiggyBack.SharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug copy "$(ProjectDir)..\PiggyBack.SharedProject\PiggyBack-Debug.addin" "$(AppData)\Autodesk\REVIT\Addins\2023"
-if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)PiggyBack.dll" "$(AppData)\Autodesk\REVIT\Addins\2023"
+    <PostBuildEvent>if $(ConfigurationName) == Debug copy "$(ProjectDir)..\Fetch.SharedProject\Fetch-Debug.addin" "$(AppData)\Autodesk\REVIT\Addins\2023"
+if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)Fetch.dll" "$(AppData)\Autodesk\REVIT\Addins\2023"
 
-if $(ConfigurationName) == Release copy "$(ProjectDir)$(OutputPath)PiggyBack.dll" "$(ProjectDir)\..\..\..\_Release\PiggyBack\2023\PiggyBack.dll"
-if $(ConfigurationName) == Release copy "$(ProjectDir)\PiggyBack.addin" "$(ProjectDir)\..\..\..\_Release\PiggyBack\2023"</PostBuildEvent>
+if $(ConfigurationName) == Release copy "$(ProjectDir)$(OutputPath)PiggyBack.dll" "$(ProjectDir)\..\..\..\_Release\Fetch\2023\Fetch.dll"
+if $(ConfigurationName) == Release copy "$(ProjectDir)\Fetch.addin" "$(ProjectDir)\..\..\..\_Release\Fetch\2023"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -16,6 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)PiggyBack-debug.addin" />
+    <None Include="$(MSBuildThisFileDirectory)Fetch-debug.addin" />
   </ItemGroup>
 </Project>
