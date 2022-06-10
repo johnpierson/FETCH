@@ -6,7 +6,7 @@
     <SharedGUID>a569d3fe-79a6-4a6f-80e3-66497997f859</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>PiggyBack</Import_RootNamespace>
+    <Import_RootNamespace>Fetch</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />

@@ -14,6 +14,9 @@ namespace Fetch.Commands
         internal static string TestURl =
             "https://drive.google.com/file/d/1O5kW_sThjwVK6BoAWZ3jBMFeOMggXXT_/view?usp=sharing";
 
+        internal static string TestURl2 =
+            "https://parallaxteam-my.sharepoint.com/:u:/p/johnpierson/EXRLIhSfKZBAsTnP1BnzPPAB65Js2mZmeC721AhEpt7oVg?e=MdRg1H";
+
         internal static string DownloadPath = Path.Combine(Globals.TempPath,$"{DateTime.Now:yyyyMMdd}_packages.zip");
 
         internal static TaskbarManager taskbarManager;
@@ -60,7 +63,7 @@ namespace Fetch.Commands
             {
                 Visible = true,
                 Icon = System.Drawing.SystemIcons.Information,
-                BalloonTipText = "Packages synced",
+                BalloonTipText = $"Packages synced for Dynamo {Globals.DynamoVersion}",
                 BalloonTipTitle = "Fetch"
             };
 

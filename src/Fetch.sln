@@ -3,14 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2023", "PiggyBack.2023\Fetch.2023.csproj", "{6DEC72DB-6655-495E-BE15-2CDB73229785}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2023", "Fetch.2023\Fetch.2023.csproj", "{6DEC72DB-6655-495E-BE15-2CDB73229785}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Fetch.SharedProject", "PiggyBack.SharedProject\Fetch.SharedProject.shproj", "{A569D3FE-79A6-4A6F-80E3-66497997F859}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Fetch.SharedProject", "Fetch.SharedProject\Fetch.SharedProject.shproj", "{A569D3FE-79A6-4A6F-80E3-66497997F859}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		PiggyBack.SharedProject\PiggyBack.SharedProject.projitems*{6dec72db-6655-495e-be15-2cdb73229785}*SharedItemsImports = 4
-		PiggyBack.SharedProject\PiggyBack.SharedProject.projitems*{a569d3fe-79a6-4a6f-80e3-66497997f859}*SharedItemsImports = 13
+		Fetch.SharedProject\Fetch.SharedProject.projitems*{6dec72db-6655-495e-be15-2cdb73229785}*SharedItemsImports = 4
+		Fetch.SharedProject\Fetch.SharedProject.projitems*{a569d3fe-79a6-4a6f-80e3-66497997f859}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
