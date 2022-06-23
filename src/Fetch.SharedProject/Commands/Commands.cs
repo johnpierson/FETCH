@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.IO.Packaging;
+using System.Net;
 using System.Text;
+using Autodesk.Internal.InfoCenter;
+using Autodesk.Windows;
 using Fetch.Classes;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using UIFramework;
@@ -16,6 +19,8 @@ namespace Fetch.Commands
 
         internal static string TestURl2 =
             "https://drive.google.com/file/d/1O5kW_sThjwVK6BoAWZ3jBMFeOMggXXT_/view?usp=sharing";
+
+        internal static string TestUrl3 = "https://drive.google.com/uc?export=download&id=1O5kW_sThjwVK6BoAWZ3jBMFeOMggXXT_";
 
         internal static string DownloadPath = Path.Combine(Globals.TempPath,$"{DateTime.Now:yyyyMMdd}_packages.zip");
 
@@ -34,11 +39,20 @@ namespace Fetch.Commands
         public static void DownloadAndUnzipPackages()
         {
             ReadINI();
+            WebClient client = new WebClient();
 
-            FileDownloader fd = new FileDownloader();
-            fd.DownloadFileCompleted += FdOnDownloadFileCompleted;
-            fd.DownloadFile(TestURl, DownloadPath);
+            Uri uri = new Uri(TestUrl3);
+
+            client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCallback2);
+
+            client.DownloadFileAsync(uri,DownloadPath);
+            
+            //FileDownloader fd = new FileDownloader();
+            //fd.DownloadFileCompleted += FdOnDownloadFileCompleted;
+            //fd.DownloadFile(TestURl2, DownloadPath);
         }
+
+       
 
         private static void UnzipPackages()
         {
@@ -68,18 +82,47 @@ namespace Fetch.Commands
 
         private static void ShowNotification()
         {
-            var notification = new System.Windows.Forms.NotifyIcon()
+            ResultItem result = new ResultItem
             {
-                Visible = true,
-                Icon = System.Drawing.SystemIcons.Information,
-                BalloonTipText = $"Packages fetched for Dynamo {Globals.DynamoVersion}",
-                BalloonTipTitle = "Fetch"
+                Title = $"Current packages fetched for Dynamo {Globals.DynamoVersion}",
+                Category = "Fetch",
+                IsNew = true,
+                Timestamp = DateTime.Now
             };
 
-            notification.ShowBalloonTip(1000);
+            ComponentManager.InfoCenterPaletteManager.ShowBalloon(result);
+
+            //var notification = new System.Windows.Forms.NotifyIcon()
+            //{
+            //    Visible = true,
+            //    Icon = System.Drawing.SystemIcons.Information,
+            //    BalloonTipText = $"Packages fetched for Dynamo {Globals.DynamoVersion}",
+            //    BalloonTipTitle = "Fetch"
+            //};
+
+            //notification.ShowBalloonTip(1000);
         }
 
         #region EventHandlers
+        private static void DownloadFileCallback2(object sender, AsyncCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                Console.WriteLine("File download cancelled.");
+                return;
+            }
+
+            if (e.Error != null)
+            {
+                Console.WriteLine(e.Error.ToString());
+                return;
+            }
+
+            Globals.TaskbarManager.SetProgressValue(1, 3);
+
+            UnzipPackages();
+        }
+
         /// <summary>
         /// Show a notification regarding download of zip completed
         /// </summary>
