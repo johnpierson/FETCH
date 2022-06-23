@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.IO.Packaging;
 using System.Net;
 using System.Text;
+using System.Windows.Media;
 using Autodesk.Internal.InfoCenter;
+using Autodesk.Internal.Windows;
 using Autodesk.Windows;
 using Fetch.Classes;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using UIFramework;
+using FontFamily = System.Windows.Media.FontFamily;
 
 namespace Fetch.Commands
 {
@@ -91,16 +95,7 @@ namespace Fetch.Commands
             };
 
             ComponentManager.InfoCenterPaletteManager.ShowBalloon(result);
-
-            //var notification = new System.Windows.Forms.NotifyIcon()
-            //{
-            //    Visible = true,
-            //    Icon = System.Drawing.SystemIcons.Information,
-            //    BalloonTipText = $"Packages fetched for Dynamo {Globals.DynamoVersion}",
-            //    BalloonTipTitle = "Fetch"
-            //};
-
-            //notification.ShowBalloonTip(1000);
+            //ComponentManager.FontSettings.ComponentFontFamily = new FontFamily("Comic Sans MS");
         }
 
         #region EventHandlers
