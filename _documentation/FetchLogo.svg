@@ -7,7 +7,7 @@
    viewBox="0 0 105.83333 52.916668"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
    sodipodi:docname="FetchLogo.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -24,15 +24,17 @@
      inkscape:document-units="mm"
      showgrid="false"
      units="px"
-     inkscape:zoom="1.5554293"
-     inkscape:cx="222.76808"
-     inkscape:cy="217.62481"
-     inkscape:window-width="3440"
-     inkscape:window-height="1373"
-     inkscape:window-x="-9"
-     inkscape:window-y="184"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:zoom="2.1997092"
+     inkscape:cx="248.44193"
+     inkscape:cy="181.61491"
+     inkscape:window-width="2398"
+     inkscape:window-height="1311"
+     inkscape:window-x="509"
+     inkscape:window-y="256"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g27376"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#505050" />
   <defs
      id="defs2">
     <rect
@@ -318,16 +320,18 @@
        transform="translate(-5.5917075,1.6846599)">
       <text
          xml:space="preserve"
-         transform="matrix(1.5822245,0,0,1.5822245,-58.104941,-90.830518)"
+         transform="matrix(1.0224599,0,0,1.0224599,-33.336452,-43.723391)"
          id="text13573"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Amatic;-inkscape-font-specification:'Amatic, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect13575);fill:#5a758c;fill-opacity:1;stroke:none"><tspan
            x="43.642578"
-           y="86.199106"
-           id="tspan27543">fetch</tspan></text>
+           y="80.492421"
+           id="tspan555"><tspan
+             style="font-family:'Comic Neue';-inkscape-font-specification:'Comic Neue'"
+             id="tspan553">fetch</tspan></tspan></text>
       <g
          id="g16394"
          style="fill:#1a1a1a"
-         transform="matrix(0.12508137,0,0,0.12508137,95.945237,42.385659)">
+         transform="matrix(0.12508137,0,0,0.12508137,101.35788,34.796824)">
         <path
            d="m -2.5946504,-66.263141 c -2.4556508,0 -4.8108306,0.975643 -6.5482611,2.71198 -1.7363365,1.736336 -2.7119795,4.092927 -2.7119795,6.548261 0,2.455333 0.975643,4.812241 2.7119795,6.548261 1.7377128,1.736337 4.0929278,2.711979 6.5482611,2.711979 2.45565088,0 4.8122417,-0.975642 6.5482612,-2.711979 1.7360194,-1.736337 2.7119792,-4.092928 2.7119792,-6.548261 0,-2.455334 -0.9756423,-4.812242 -2.7119792,-6.548261 -1.736337,-1.73602 -4.09292782,-2.71198 -6.5482612,-2.71198 z m 0,12.347223 c -1.2485158,0 -2.3743708,-0.752405 -2.85115,-1.905812 -0.4781903,-1.153407 -0.2135963,-2.480451 0.6683375,-3.363806 0.8833203,-0.883321 2.2103645,-1.146528 3.3638067,-0.668338 1.15340696,0.476814 1.90581141,1.602669 1.90581141,2.85115 0,0.81855 -0.32521878,1.604045 -0.90399306,2.182813 -0.57877428,0.578767 -1.36426225,0.903993 -2.18281255,0.903993 z"
            id="path16175"
