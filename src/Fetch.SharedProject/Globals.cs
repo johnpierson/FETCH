@@ -14,8 +14,8 @@ namespace Fetch
 
         public static string TempPath = Path.GetTempPath();
         public static Version DynamoVersion { get; set; }
-
         public static string DefaultDynamoPackagePath { get; set; }
+        public static string PackageURL { get; set; }
 
         public static FileSystemWatcher PackageWatcher { get; set; }
 

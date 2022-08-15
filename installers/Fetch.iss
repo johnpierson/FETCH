@@ -51,11 +51,11 @@ begin
   CustomQueryPage := CreateInputQueryPage(
     wpWelcome,
     'Welcome to FETCH',
-    'FETCH allows you to sync Dynamo packages (.zip) from a public Google Drive URL to your local folder.',
-    'Please paste the Google Drive URL here');
+    'FETCH allows you to sync Dynamo packages from a local directory. (This can be a path like Dropbox, Google Drive, OneDrive, etc. As long as it is accesible in File Explorer, we should be good.)',
+    'Please paste the local directory path');
 
   { Add items (False means it's not a password edit) }
-  CustomQueryPage.Add('Link to ZIP file on Google Drive:', False);
+  CustomQueryPage.Add('Local Path:', False);
 end;
 
 procedure InitializeWizard();

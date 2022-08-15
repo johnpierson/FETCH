@@ -19,8 +19,6 @@ namespace Fetch.Commands
 {
     internal class Commands
     {
-        internal static string TestURl = string.Empty;
-
         internal static string TestURl2 =
             "https://drive.google.com/file/d/1O5kW_sThjwVK6BoAWZ3jBMFeOMggXXT_/view?usp=sharing";
 
@@ -31,10 +29,10 @@ namespace Fetch.Commands
         internal static TaskbarManager TaskbarManager;
 
 
-        public static void ReadINI()
+        public static void ReadIni()
         {
             var fetchIni = new FetchIniFile();
-            TestURl = fetchIni.Read("Path","Settings");
+            Globals.PackageURL = fetchIni.Read("Path","Settings");
         }
 
         /// <summary>
@@ -42,10 +40,10 @@ namespace Fetch.Commands
         /// </summary>
         public static void DownloadAndUnzipPackages()
         {
-            ReadINI();
+            ReadIni();
             WebClient client = new WebClient();
 
-            Uri uri = new Uri(TestUrl3);
+            Uri uri = new Uri(Globals.PackageURL);
 
             client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCallback2);
 
@@ -83,8 +81,27 @@ namespace Fetch.Commands
             Globals.TaskbarManager.SetProgressValue(2, 3);
         }
 
+        internal static void SyncPackagesFromLocalPath()
+        {
+            DeleteOldPackages();
 
-        private static void ShowNotification()
+            //Now Create all of the directories
+            foreach (string dirPath in Directory.GetDirectories(Globals.PackageURL, "*", SearchOption.AllDirectories))
+            {
+                Directory.CreateDirectory(dirPath.Replace(Globals.PackageURL, Globals.DefaultDynamoPackagePath));
+            }
+
+            //Copy all the files & Replaces any files with the same name
+            foreach (string newPath in Directory.GetFiles(Globals.PackageURL, "*.*", SearchOption.AllDirectories))
+            {
+                File.Copy(newPath, newPath.Replace(Globals.PackageURL, Globals.DefaultDynamoPackagePath), true);
+            }
+
+            ShowNotification();
+        }
+
+
+        internal static void ShowNotification()
         {
             ResultItem result = new ResultItem
             {

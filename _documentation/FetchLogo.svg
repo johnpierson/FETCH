@@ -9,6 +9,9 @@
    id="svg5"
    inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
    sodipodi:docname="FetchLogo.svg"
+   inkscape:export-filename="FetchLogo.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -314,7 +317,7 @@
        xml:space="preserve"
        transform="scale(0.26458333)"
        id="text1396"
-       style="fill:#000000;fill-opacity:1;stroke:none;font-family:'Bungee Shade';font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect1398);-inkscape-font-specification:'Bungee Shade, Normal';font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal" />
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:'Bungee Shade';-inkscape-font-specification:'Bungee Shade, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect1398);display:inline;fill:#000000;fill-opacity:1;stroke:none" />
     <g
        id="g27376"
        transform="translate(-5.5917075,1.6846599)">
@@ -322,12 +325,12 @@
          xml:space="preserve"
          transform="matrix(1.0224599,0,0,1.0224599,-33.336452,-43.723391)"
          id="text13573"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Amatic;-inkscape-font-specification:'Amatic, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect13575);fill:#5a758c;fill-opacity:1;stroke:none"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Amatic;-inkscape-font-specification:'Amatic, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect13575);display:inline;fill:#5a758c;fill-opacity:1;stroke:none"><tspan
            x="43.642578"
            y="80.492421"
-           id="tspan555"><tspan
+           id="tspan643"><tspan
              style="font-family:'Comic Neue';-inkscape-font-specification:'Comic Neue'"
-             id="tspan553">fetch</tspan></tspan></text>
+             id="tspan641">fetch</tspan></tspan></text>
       <g
          id="g16394"
          style="fill:#1a1a1a"

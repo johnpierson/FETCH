@@ -2,7 +2,7 @@
 <RevitAddIns>
   <AddIn Type="Application">
     <Name>Fetch</Name>
-    <Assembly>Fetch.dll</Assembly>
+    <Assembly>.\Fetch\Fetch.dll</Assembly>
     <FullClassName>Fetch.App</FullClassName>
     <ClientId>5f9dbc60-6b94-4138-ae16-fa49ffc3e6ce</ClientId>
     <VendorId>DesignTechUnraveled</VendorId>

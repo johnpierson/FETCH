@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using Autodesk.Revit.UI;
 
 namespace Fetch
@@ -13,23 +9,42 @@ namespace Fetch
     {
         public Result OnStartup(UIControlledApplication application)
         {
+            if (!FindDynamoVersions())
+            {
+                return Result.Failed;
+            }
+
+            Globals.TaskbarManager = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
+            Globals.TaskbarManager.SetProgressValue(0, 3);
+
+            //if the URL is local, then we do a copy
+            Commands.Commands.ReadIni();
+            if (Directory.Exists(Globals.PackageURL))
+            {
+                try
+                {
+                    Commands.Commands.SyncPackagesFromLocalPath();
+                    return Result.Succeeded;
+                }
+                catch (Exception)
+                {
+                    return Result.Failed;
+                }
+            }
+
+            //TODO: Re-Implement the cloud downloading ability. For now, we support local paths.
+            return Result.Cancelled;
+
+            //if the URL is a google drive link, try to download
             //check if there is an internet connection first
             if (!Utilities.Utilities.CheckForInternetConnection())
             {
                 return Result.Cancelled;
             }
 
-            Globals.TaskbarManager = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
-            Globals.TaskbarManager.SetProgressValue(0, 3);
+            Commands.Commands.DownloadAndUnzipPackages();
 
-            if (FindDynamoVersions())
-            {
-                Commands.Commands.DownloadAndUnzipPackages();
-
-                return Result.Succeeded;
-            }
-
-            return Result.Failed;
+            return Result.Succeeded;
         }
 
         public Result OnShutdown(UIControlledApplication application)
