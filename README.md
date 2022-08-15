@@ -6,9 +6,9 @@
 
 <h3 align="center">A plugin for Revit to help manage Dynamo packages.</h3>
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/johnpierson/piggyBACK?include_prereleases)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/johnpierson/piggyBACK/graphs/commit-activity)
-[![GitHub license](https://img.shields.io/github/license/johnpierson/piggyBACK)](https://github.com/johnpierson/piggyBACK/blob/master/LICENSE)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/johnpierson/FETCH?include_prereleases)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/johnpierson/FETCH/graphs/commit-activity)
+[![GitHub license](https://img.shields.io/github/license/johnpierson/FETCH)](https://github.com/johnpierson/FETCH/blob/master/LICENSE)
 
 
 If you appreciate the work put into this free package, please vote in support of it on Dynamo's package manager. 
@@ -18,16 +18,16 @@ If you appreciate the work put into this free package, please vote in support of
  <a href="https://www.buymeacoffee.com/j0hnp" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
 ## LICENSE
-This code is licensed primarily under [BSD 3-Clause](https://github.com/johnpierson/MonocleForDynamo/blob/master/LICENSE) with a [Commons Clause License](https://commonsclause.com/) attached to that.
+This code is licensed primarily under [BSD 3-Clause](https://github.com/johnpierson/FETCH/blob/master/LICENSE) with a [Commons Clause License](https://commonsclause.com/) attached to that.
 
 ## Current Version
-Monocle is currently built against the latest Dynamo stable build. At this time that is 2.12.0. _However, monocle has been tested for Dynamo 2.0.3 - 2.13.0._
+FETCH is currently built against all current versions of Revit (2021,2022,2023)
 
 ## Known Issues
-- When installing from the package manager for the first time, you may need to restart Dynamo.
+- N/A
 
 ## Contributors
-This package is primarily managed by the author of http://sixtysecondrevit.com, [ParallaxTeam](https://www.parallaxteam.com/) and by [People Like You™](https://github.com/johnpierson/MonocleForDynamo/graphs/contributors).
+This package is primarily managed by the author of http://designtechunraveled.com, [ParallaxTeam](https://www.parallaxteam.com/) and by [People Like You™](https://github.com/johnpierson/MonocleForDynamo/graphs/contributors).
 
 ## Updates
 Since there is not currently an update notification process on Dynamo's package manager, I post notifications for updates on twitter.
@@ -35,19 +35,6 @@ Since there is not currently an update notification process on Dynamo's package 
 
 Additionally,  updates come through in the extension menu now!
 
-## Help improve Monocle
-If you're interested in contributing to Monocle, just submit a [pull request](https://github.com/johnpierson/MonocleForDynamo/pulls) or a [feature request](https://github.com/johnpierson/MonocleForDynamo/issues) .
+## Help improve FETCH
+If you're interested in contributing to FETCH, just submit a [pull request](https://github.com/johnpierson/FETCH/pulls) or a [feature request](https://github.com/johnpierson/FETCH/issues) .
 
-If submitting a pull request, keep in mind the monocle style guide below.
-
-## monocle style guide
-
- <img src="https://github.com/johnpierson/MonocleForDynamo/raw/master/!Documentation/monocleStyleGuide.png" alt="style guide" width="1200">
-
-## Installation
-Monocle is available through Dynamo's built-in package manager. This provides the simplest installation for most users. If you are interested in manual install, there are some fabulous resources out there describing how to build your own Dynamo package.
-
-## Thank you!
-
-
-[![forthebadge](https://forthebadge.com/images/badges/made-with-crayons.svg)](https://forthebadge.com)
