@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="_Documentation/FetchLogo.png" alt="FETCH" width="200">
+  <img src="/_documentation/FetchLogo.png" alt="FETCH" width="400">
   <br>
 </h1>
 
