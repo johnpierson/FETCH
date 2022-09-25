@@ -8,7 +8,7 @@
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/johnpierson/FETCH?include_prereleases)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/johnpierson/FETCH/graphs/commit-activity)
-[![GitHub license](https://img.shields.io/github/license/johnpierson/FETCH)](https://github.com/johnpierson/FETCH/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/johnpierson/FETCH)](https://github.com/johnpierson/FETCH/blob/main/LICENSE)
 
 
 If you appreciate the work put into this free package, please vote in support of it on Dynamo's package manager. 
