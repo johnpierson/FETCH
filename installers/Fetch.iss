@@ -2,12 +2,18 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "FETCH for Revit"
-#define MyAppVersion "1.0"
+#define MyAppVersion "0.0.2"
 #define MyAppPublisher "Design Tech Unraveled"
 #define MyAppURL "http://www.designtechunraveled.com/"
 #define RevitAddinsLocation "C:\ProgramData\Autodesk\Revit\Addins"
+#define RevitAddin21 RevitAddinsLocation+"\2021"
+#define RevitFiles21 RevitAddin21+"\FETCH"
+#define RevitAddin22 RevitAddinsLocation+"\2022"
+#define RevitFiles22 RevitAddin22+"\FETCH"
 #define RevitAddin23 RevitAddinsLocation+"\2023"
 #define RevitFiles23 RevitAddin23+"\FETCH"
+#define RevitAddin24 RevitAddinsLocation+"\2024"
+#define RevitFiles24 RevitAddin24+"\FETCH"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -31,16 +37,36 @@ SolidCompression=yes
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+[Components]
+Name: "Revit2021"; Description: "fetch For Revit 2021";  Types: full custom;
+Name: "Revit2022"; Description: "fetch For Revit 2022";  Types: full custom;
+Name: "Revit2023"; Description: "fetch For Revit 2023";  Types: full custom;
+Name: "Revit2024"; Description: "fetch For Revit 2024";  Types: full custom;
+
 [Files]
+
+; Revit 2021
+Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin21}"; Flags: ignoreversion; Components: Revit2021
+Source: "..\_Release\2021\Fetch.dll"; DestDir: "{#RevitFiles21}"; Flags: ignoreversion; Components: Revit2021
+
+; Revit 2022
+Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin22}"; Flags: ignoreversion; Components: Revit2022
+Source: "..\_Release\2022\Fetch.dll"; DestDir: "{#RevitFiles22}"; Flags: ignoreversion ; Components: Revit2022
+
 ; Revit 2023
-Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin23}"; Flags: ignoreversion
-Source: "..\_Release\2023\Fetch.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion
-Source: "..\_Release\2023\Microsoft.WindowsAPICodePack.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion
-Source: "..\_Release\2023\Microsoft.WindowsAPICodePack.Shell.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin23}"; Flags: ignoreversion; Components: Revit2023
+Source: "..\_Release\2023\Fetch.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion ; Components: Revit2023
+
+; Revit 2024
+Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin24}"; Flags: ignoreversion; Components: Revit2024
+Source: "..\_Release\2024\Fetch.dll"; DestDir: "{#RevitFiles24}"; Flags: ignoreversion ; Components: Revit2024
+
 
 [INI]
-Filename: "{#RevitFiles23}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; 
+Filename: "{#RevitFiles21}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2021
+Filename: "{#RevitFiles22}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2022
+Filename: "{#RevitFiles23}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2023
+Filename: "{#RevitFiles24}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2024
 
 [Code]
 var
@@ -51,7 +77,7 @@ begin
   CustomQueryPage := CreateInputQueryPage(
     wpWelcome,
     'Welcome to FETCH',
-    'FETCH allows you to sync Dynamo packages from a local directory. (This can be a path like Dropbox, Google Drive, OneDrive, etc. As long as it is accesible in File Explorer, we should be good.)',
+    'FETCH allows you to sync Dynamo packages from a local directory. (This can be a path like Dropbox, Google Drive, OneDrive, etc. As long as it is accessible in File Explorer, we should be good.)',
     'Please paste the local directory path');
 
   { Add items (False means it's not a password edit) }

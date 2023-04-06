@@ -9,6 +9,10 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Fetch.SharedProject", "Fetc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2024", "Fetch.2024\Fetch.2024.csproj", "{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2022", "Fetch.2022\Fetch.2022.csproj", "{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2021", "Fetch.2021\Fetch.2021.csproj", "{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,14 @@ Global
 		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -33,6 +45,8 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Fetch.SharedProject\Fetch.SharedProject.projitems*{6dec72db-6655-495e-be15-2cdb73229785}*SharedItemsImports = 4
 		Fetch.SharedProject\Fetch.SharedProject.projitems*{9c839d66-9571-42ea-b54f-d1c0a2ba2b16}*SharedItemsImports = 4
+		Fetch.SharedProject\Fetch.SharedProject.projitems*{9ebaadd8-4f72-46b2-b3a7-c8e869e7453d}*SharedItemsImports = 4
 		Fetch.SharedProject\Fetch.SharedProject.projitems*{a569d3fe-79a6-4a6f-80e3-66497997f859}*SharedItemsImports = 13
+		Fetch.SharedProject\Fetch.SharedProject.projitems*{d4a68fc8-841d-4d60-8edc-53e1e9b7c2fe}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
