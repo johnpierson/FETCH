@@ -19,19 +19,13 @@
 This code is licensed primarily under [BSD 3-Clause](https://github.com/johnpierson/FETCH/blob/master/LICENSE) with a [Commons Clause License](https://commonsclause.com/) attached to that.
 
 ## Current Version
-FETCH is currently built against all current versions of Revit (2021,2022,2023)
+FETCH is currently built against all current versions of Revit (2021,2022,2023,2024)
 
 ## Known Issues
 - N/A
 
 ## Contributors
-This package is primarily managed by the author of http://designtechunraveled.com, [ParallaxTeam](https://www.parallaxteam.com/) and by [People Like You™](https://github.com/johnpierson/MonocleForDynamo/graphs/contributors).
-
-## Updates
-Since there is not currently an update notification process on Dynamo's package manager, I post notifications for updates on twitter.
-[![](https://img.shields.io/twitter/follow/johntpierson.svg?label=Follow&style=social)](https://twitter.com/johntpierson)
-
-Additionally,  updates come through in the extension menu now!
+This package is primarily managed by the author of http://designtechunraveled.com, [ParallaxTeam](https://www.parallaxteam.com/) and by [People Like You™](https://github.com/johnpierson/FETCH/graphs/contributors).
 
 ## Help improve FETCH
 If you're interested in contributing to FETCH, just submit a [pull request](https://github.com/johnpierson/FETCH/pulls) or a [feature request](https://github.com/johnpierson/FETCH/issues) .
