@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Autodesk.Revit.UI;
@@ -9,13 +11,16 @@ namespace Fetch
     {
         public Result OnStartup(UIControlledApplication application)
         {
+            //store revit version 
+            Globals.RevitVersion = application.ControlledApplication.VersionNumber;
+
+            //try to find the dynamo version and see if it is running already in a revit session with the same version
             if (!FindDynamoVersions())
             {
                 return Result.Failed;
             }
 
-            Globals.TaskbarManager = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
-            Globals.TaskbarManager.SetProgressValue(0, 3);
+            VerifyDynamoLoaded();
 
             //if the URL is local, then we do a copy
             Commands.Commands.ReadIni();
@@ -66,7 +71,36 @@ namespace Fetch
 
             return true;
         }
+        /// <summary>
+        /// Gets all processes running on the machine then checks if they are "Revit" based. Then if it does find any it checks if Dynamo dll's are in memory.
+        /// If yes it changes Global "IsDynamoInMemory" to True
+        /// </summary>
+        public static void VerifyDynamoLoaded()
+        {
+            List<bool> tempBoolList = new List<bool>();
 
-      
+            foreach (Process process in Process.GetProcessesByName("revit"))
+            {
+                if (process.MainModule.FileName.Contains(Globals.RevitVersion))
+                {
+                    foreach (ProcessModule module in process.Modules)
+                    {
+                        if (module.FileName.ToLower().Contains("dynamo"))
+                        {
+                            tempBoolList.Add(true);
+                        }
+                    }
+                }
+            }
+            if (tempBoolList.Count() > 0)
+            {
+                Globals.IsDynamoInMemory = true;
+            }
+            else
+            {
+                Globals.IsDynamoInMemory = false;
+            }
+        }
+
     }
 }

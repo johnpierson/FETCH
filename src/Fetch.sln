@@ -7,11 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2023", "Fetch.2023\Fe
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Fetch.SharedProject", "Fetch.SharedProject\Fetch.SharedProject.shproj", "{A569D3FE-79A6-4A6F-80E3-66497997F859}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2024", "Fetch.2024\Fetch.2024.csproj", "{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Fetch.SharedProject\Fetch.SharedProject.projitems*{6dec72db-6655-495e-be15-2cdb73229785}*SharedItemsImports = 4
-		Fetch.SharedProject\Fetch.SharedProject.projitems*{a569d3fe-79a6-4a6f-80e3-66497997f859}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -21,11 +19,20 @@ Global
 		{6DEC72DB-6655-495E-BE15-2CDB73229785}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DEC72DB-6655-495E-BE15-2CDB73229785}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DEC72DB-6655-495E-BE15-2CDB73229785}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BB5E99-DF70-450B-A6A2-181D06076A69}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Fetch.SharedProject\Fetch.SharedProject.projitems*{6dec72db-6655-495e-be15-2cdb73229785}*SharedItemsImports = 4
+		Fetch.SharedProject\Fetch.SharedProject.projitems*{9c839d66-9571-42ea-b54f-d1c0a2ba2b16}*SharedItemsImports = 4
+		Fetch.SharedProject\Fetch.SharedProject.projitems*{a569d3fe-79a6-4a6f-80e3-66497997f859}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

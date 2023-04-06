@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6DEC72DB-6655-495E-BE15-2CDB73229785}</ProjectGuid>
+    <ProjectGuid>{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Fetch</RootNamespace>
@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Revit_All_Main_Versions_API_x64">
-      <Version>2023.0.0</Version>
+      <Version>2024.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -64,10 +64,10 @@
   <Import Project="..\Fetch.SharedProject\Fetch.SharedProject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug copy "$(ProjectDir)..\Fetch.SharedProject\Fetch-Debug.addin" "$(AppData)\Autodesk\REVIT\Addins\2023"
-if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)Fetch.dll" "$(AppData)\Autodesk\REVIT\Addins\2023\fetch"
+    <PostBuildEvent>if $(ConfigurationName) == Debug copy "$(ProjectDir)..\Fetch.SharedProject\Fetch-Debug.addin" "$(AppData)\Autodesk\REVIT\Addins\2024"
+if $(ConfigurationName) == Debug copy "$(ProjectDir)$(OutputPath)Fetch.dll" "$(AppData)\Autodesk\REVIT\Addins\2024\fetch"
 
-if $(ConfigurationName) == Release copy "$(ProjectDir)$(OutputPath)Fetch.dll" "$(ProjectDir)..\..\_Release\2023"
+if $(ConfigurationName) == Release copy "$(ProjectDir)$(OutputPath)Fetch.dll" "$(ProjectDir)..\..\_Release\2024"
 if $(ConfigurationName) == Release copy "$(ProjectDir)Fetch.addin" "$(ProjectDir)..\..\_Release"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -11,8 +11,7 @@ using Autodesk.Internal.InfoCenter;
 using Autodesk.Internal.Windows;
 using Autodesk.Windows;
 using Fetch.Classes;
-using Microsoft.WindowsAPICodePack.Taskbar;
-using UIFramework;
+
 using FontFamily = System.Windows.Media.FontFamily;
 
 namespace Fetch.Commands
@@ -25,8 +24,6 @@ namespace Fetch.Commands
         internal static string TestUrl3 = "https://drive.google.com/uc?export=download&id=1O5kW_sThjwVK6BoAWZ3jBMFeOMggXXT_";
 
         internal static string DownloadPath = Path.Combine(Globals.TempPath,$"{DateTime.Now:yyyyMMdd}_packages.zip");
-
-        internal static TaskbarManager TaskbarManager;
 
 
         public static void ReadIni()
@@ -60,9 +57,7 @@ namespace Fetch.Commands
         {
             DeleteOldPackages();
             System.IO.Compression.ZipFile.ExtractToDirectory(DownloadPath, Globals.DefaultDynamoPackagePath);
-            Globals.TaskbarManager.SetProgressValue(3, 3);
-            Globals.TaskbarManager.SetProgressState(TaskbarProgressBarState.NoProgress);
-            
+
             ShowNotification();
         }
 
@@ -78,7 +73,6 @@ namespace Fetch.Commands
             {
                 dir.Delete(true);
             }
-            Globals.TaskbarManager.SetProgressValue(2, 3);
         }
 
         internal static void SyncPackagesFromLocalPath()
@@ -130,7 +124,6 @@ namespace Fetch.Commands
                 return;
             }
 
-            Globals.TaskbarManager.SetProgressValue(1, 3);
 
             UnzipPackages();
         }
@@ -142,14 +135,12 @@ namespace Fetch.Commands
         /// <param name="e"></param>
         private static void FdOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            Globals.TaskbarManager.SetProgressValue(1,3);
-
             UnzipPackages();
         }
 
         private static void PackageWatcherOnCreated(object sender, FileSystemEventArgs e)
         {
-            TaskbarManager.SetProgressValue(10,100);
+            
         }
 
         #endregion
