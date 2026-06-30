@@ -10,11 +10,6 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/johnpierson/FETCH/graphs/commit-activity)
 [![GitHub license](https://img.shields.io/github/license/johnpierson/FETCH)](https://github.com/johnpierson/FETCH/blob/main/LICENSE)
 
-
- _If you feel so inclined, here is a method to donate to this project_
-
- <a href="https://www.buymeacoffee.com/j0hnp" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-
 ## LICENSE
 This code is licensed primarily under [BSD 3-Clause](https://github.com/johnpierson/FETCH/blob/main/LICENSE) with a [Commons Clause License](https://commonsclause.com/) attached to that.
 
