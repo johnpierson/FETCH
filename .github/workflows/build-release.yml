@@ -1,0 +1,115 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build FETCH
+    runs-on: windows-latest
+
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: true
+      FETCH_PROJECT: src\Fetch\Fetch.csproj
+      FETCH_INSTALLER: installers\Fetch.iss
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDKs
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Build Revit release configurations
+        shell: pwsh
+        run: |
+          $configurations = @(
+            "Release R21",
+            "Release R22",
+            "Release R23",
+            "Release R24",
+            "Release R25",
+            "Release R26",
+            "Release R27"
+          )
+
+          foreach ($configuration in $configurations) {
+            dotnet build $env:FETCH_PROJECT --configuration $configuration
+            if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+            }
+          }
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress --yes
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (!(Test-Path $iscc)) {
+            throw "Inno Setup compiler not found at $iscc"
+          }
+
+          & $iscc $env:FETCH_INSTALLER
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Stage release artifacts
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          Compress-Archive -Path _Release\* -DestinationPath artifacts\FETCH-Binaries.zip -Force
+
+          if (Test-Path installers\Output\Fetch.exe) {
+            Copy-Item installers\Output\Fetch.exe artifacts\FETCH-Installer.exe -Force
+          } else {
+            throw "Expected installer output was not found at installers\Output\Fetch.exe"
+          }
+
+      - name: Upload binaries artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FETCH-Binaries
+          path: artifacts/FETCH-Binaries.zip
+          if-no-files-found: error
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FETCH-Installer
+          path: artifacts/FETCH-Installer.exe
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create $env:GITHUB_REF_NAME `
+            artifacts\FETCH-Installer.exe `
+            artifacts\FETCH-Binaries.zip `
+            --repo $env:GITHUB_REPOSITORY `
+            --title $env:GITHUB_REF_NAME `
+            --generate-notes
