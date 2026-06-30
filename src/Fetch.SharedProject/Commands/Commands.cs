@@ -6,13 +6,12 @@ using System.IO;
 using System.IO.Packaging;
 using System.Net;
 using System.Text;
-using System.Windows.Media;
+#if !NET8_0_OR_GREATER
 using Autodesk.Internal.InfoCenter;
-using Autodesk.Internal.Windows;
 using Autodesk.Windows;
+#endif
+using Autodesk.Revit.UI;
 using Fetch.Classes;
-
-using FontFamily = System.Windows.Media.FontFamily;
 
 namespace Fetch.Commands
 {
@@ -97,6 +96,9 @@ namespace Fetch.Commands
 
         internal static void ShowNotification()
         {
+#if NET8_0_OR_GREATER
+            TaskDialog.Show("Fetch", $"Current packages fetched for Dynamo {Globals.DynamoVersion}");
+#else
             ResultItem result = new ResultItem
             {
                 Title = $"Current packages fetched for Dynamo {Globals.DynamoVersion}",
@@ -107,6 +109,7 @@ namespace Fetch.Commands
 
             ComponentManager.InfoCenterPaletteManager.ShowBalloon(result);
             //ComponentManager.FontSettings.ComponentFontFamily = new FontFamily("Comic Sans MS");
+#endif
         }
 
         #region EventHandlers

@@ -19,7 +19,7 @@
 This code is licensed primarily under [BSD 3-Clause](https://github.com/johnpierson/FETCH/blob/master/LICENSE) with a [Commons Clause License](https://commonsclause.com/) attached to that.
 
 ## Current Version
-FETCH is currently built against all current versions of Revit (2021,2022,2023,2024)
+FETCH is currently built against all current versions of Revit (2021,2022,2023,2024,2025,2026,2027)
 
 ## Known Issues
 - N/A

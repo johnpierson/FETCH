@@ -14,6 +14,12 @@
 #define RevitFiles23 RevitAddin23+"\FETCH"
 #define RevitAddin24 RevitAddinsLocation+"\2024"
 #define RevitFiles24 RevitAddin24+"\FETCH"
+#define RevitAddin25 RevitAddinsLocation+"\2025"
+#define RevitFiles25 RevitAddin25+"\FETCH"
+#define RevitAddin26 RevitAddinsLocation+"\2026"
+#define RevitFiles26 RevitAddin26+"\FETCH"
+#define RevitAddin27 RevitAddinsLocation+"\2027"
+#define RevitFiles27 RevitAddin27+"\FETCH"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -42,6 +48,9 @@ Name: "Revit2021"; Description: "fetch For Revit 2021";  Types: full custom;
 Name: "Revit2022"; Description: "fetch For Revit 2022";  Types: full custom;
 Name: "Revit2023"; Description: "fetch For Revit 2023";  Types: full custom;
 Name: "Revit2024"; Description: "fetch For Revit 2024";  Types: full custom;
+Name: "Revit2025"; Description: "fetch For Revit 2025";  Types: full custom;
+Name: "Revit2026"; Description: "fetch For Revit 2026";  Types: full custom;
+Name: "Revit2027"; Description: "fetch For Revit 2027";  Types: full custom;
 
 [Files]
 
@@ -61,12 +70,27 @@ Source: "..\_Release\2023\Fetch.dll"; DestDir: "{#RevitFiles23}"; Flags: ignorev
 Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin24}"; Flags: ignoreversion; Components: Revit2024
 Source: "..\_Release\2024\Fetch.dll"; DestDir: "{#RevitFiles24}"; Flags: ignoreversion ; Components: Revit2024
 
+; Revit 2025
+Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin25}"; Flags: ignoreversion; Components: Revit2025
+Source: "..\_Release\2025\Fetch.dll"; DestDir: "{#RevitFiles25}"; Flags: ignoreversion ; Components: Revit2025
+
+; Revit 2026
+Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin26}"; Flags: ignoreversion; Components: Revit2026
+Source: "..\_Release\2026\Fetch.dll"; DestDir: "{#RevitFiles26}"; Flags: ignoreversion ; Components: Revit2026
+
+; Revit 2027
+Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin27}"; Flags: ignoreversion; Components: Revit2027
+Source: "..\_Release\2027\Fetch.dll"; DestDir: "{#RevitFiles27}"; Flags: ignoreversion ; Components: Revit2027
+
 
 [INI]
 Filename: "{#RevitFiles21}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2021
 Filename: "{#RevitFiles22}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2022
 Filename: "{#RevitFiles23}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2023
 Filename: "{#RevitFiles24}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2024
+Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2025
+Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2026
+Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2027
 
 [Code]
 var
