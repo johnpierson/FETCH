@@ -31,25 +31,35 @@ namespace Fetch
                     Commands.Commands.SyncPackagesFromLocalPath();
                     return Result.Succeeded;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    TaskDialog.Show("Fetch", $"Unable to sync Dynamo packages.\n\n{ex.Message}");
                     return Result.Failed;
                 }
             }
 
-            //TODO: Re-Implement the cloud downloading ability. For now, we support local paths.
-            return Result.Cancelled;
+            if (!Uri.TryCreate(Globals.PackageURL, UriKind.Absolute, out Uri packageUri) ||
+                (packageUri.Scheme != Uri.UriSchemeHttp && packageUri.Scheme != Uri.UriSchemeHttps))
+            {
+                TaskDialog.Show("Fetch", "FetchSettings.ini must point to an existing local folder or an HTTP/HTTPS package zip URL.");
+                return Result.Cancelled;
+            }
 
-            //if the URL is a google drive link, try to download
-            //check if there is an internet connection first
             if (!Utilities.Utilities.CheckForInternetConnection())
             {
                 return Result.Cancelled;
             }
 
-            Commands.Commands.DownloadAndUnzipPackages();
-
-            return Result.Succeeded;
+            try
+            {
+                Commands.Commands.DownloadAndUnzipPackages(packageUri);
+                return Result.Succeeded;
+            }
+            catch (Exception ex)
+            {
+                TaskDialog.Show("Fetch", $"Unable to download Dynamo packages.\n\n{ex.Message}");
+                return Result.Failed;
+            }
         }
 
         public Result OnShutdown(UIControlledApplication application)

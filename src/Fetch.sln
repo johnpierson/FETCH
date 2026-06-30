@@ -1,70 +1,61 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.1.32319.34
+VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2023", "Fetch.2023\Fetch.2023.csproj", "{6DEC72DB-6655-495E-BE15-2CDB73229785}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Fetch.SharedProject", "Fetch.SharedProject\Fetch.SharedProject.shproj", "{A569D3FE-79A6-4A6F-80E3-66497997F859}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2024", "Fetch.2024\Fetch.2024.csproj", "{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2022", "Fetch.2022\Fetch.2022.csproj", "{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fetch.2021", "Fetch.2021\Fetch.2021.csproj", "{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fetch.2025", "Fetch.2025\Fetch.2025.csproj", "{7E705767-81CD-41A9-95BA-6C4D0E621F59}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fetch.2026", "Fetch.2026\Fetch.2026.csproj", "{A8486D99-9BD4-4C05-B297-92D9CF231901}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fetch.2027", "Fetch.2027\Fetch.2027.csproj", "{23397C79-B775-4B1C-8687-5ADCD352BA03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fetch", "Fetch\Fetch.csproj", "{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Debug R21|Any CPU = Debug R21|Any CPU
+		Debug R22|Any CPU = Debug R22|Any CPU
+		Debug R23|Any CPU = Debug R23|Any CPU
+		Debug R24|Any CPU = Debug R24|Any CPU
+		Debug R25|Any CPU = Debug R25|Any CPU
+		Debug R26|Any CPU = Debug R26|Any CPU
+		Debug R27|Any CPU = Debug R27|Any CPU
+		Release R21|Any CPU = Release R21|Any CPU
+		Release R22|Any CPU = Release R22|Any CPU
+		Release R23|Any CPU = Release R23|Any CPU
+		Release R24|Any CPU = Release R24|Any CPU
+		Release R25|Any CPU = Release R25|Any CPU
+		Release R26|Any CPU = Release R26|Any CPU
+		Release R27|Any CPU = Release R27|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6DEC72DB-6655-495E-BE15-2CDB73229785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DEC72DB-6655-495E-BE15-2CDB73229785}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DEC72DB-6655-495E-BE15-2CDB73229785}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DEC72DB-6655-495E-BE15-2CDB73229785}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C839D66-9571-42EA-B54F-D1C0A2BA2B16}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4A68FC8-841D-4D60-8EDC-53E1E9B7C2FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9EBAADD8-4F72-46B2-B3A7-C8E869E7453D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7E705767-81CD-41A9-95BA-6C4D0E621F59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7E705767-81CD-41A9-95BA-6C4D0E621F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7E705767-81CD-41A9-95BA-6C4D0E621F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7E705767-81CD-41A9-95BA-6C4D0E621F59}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A8486D99-9BD4-4C05-B297-92D9CF231901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8486D99-9BD4-4C05-B297-92D9CF231901}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8486D99-9BD4-4C05-B297-92D9CF231901}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8486D99-9BD4-4C05-B297-92D9CF231901}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23397C79-B775-4B1C-8687-5ADCD352BA03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23397C79-B775-4B1C-8687-5ADCD352BA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23397C79-B775-4B1C-8687-5ADCD352BA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23397C79-B775-4B1C-8687-5ADCD352BA03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R21|Any CPU.ActiveCfg = Debug R21|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R21|Any CPU.Build.0 = Debug R21|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R22|Any CPU.ActiveCfg = Debug R22|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R22|Any CPU.Build.0 = Debug R22|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R23|Any CPU.ActiveCfg = Debug R23|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R23|Any CPU.Build.0 = Debug R23|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R24|Any CPU.ActiveCfg = Debug R24|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R24|Any CPU.Build.0 = Debug R24|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R25|Any CPU.ActiveCfg = Debug R25|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R25|Any CPU.Build.0 = Debug R25|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R26|Any CPU.ActiveCfg = Debug R26|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R26|Any CPU.Build.0 = Debug R26|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R27|Any CPU.ActiveCfg = Debug R27|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Debug R27|Any CPU.Build.0 = Debug R27|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R21|Any CPU.ActiveCfg = Release R21|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R21|Any CPU.Build.0 = Release R21|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R22|Any CPU.ActiveCfg = Release R22|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R22|Any CPU.Build.0 = Release R22|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R23|Any CPU.ActiveCfg = Release R23|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R23|Any CPU.Build.0 = Release R23|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R24|Any CPU.ActiveCfg = Release R24|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R24|Any CPU.Build.0 = Release R24|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R25|Any CPU.ActiveCfg = Release R25|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R25|Any CPU.Build.0 = Release R25|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R26|Any CPU.ActiveCfg = Release R26|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R26|Any CPU.Build.0 = Release R26|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R27|Any CPU.ActiveCfg = Release R27|Any CPU
+		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R27|Any CPU.Build.0 = Release R27|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BB5E99-DF70-450B-A6A2-181D06076A69}
-	EndGlobalSection
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Fetch.SharedProject\Fetch.SharedProject.projitems*{6dec72db-6655-495e-be15-2cdb73229785}*SharedItemsImports = 4
-		Fetch.SharedProject\Fetch.SharedProject.projitems*{9c839d66-9571-42ea-b54f-d1c0a2ba2b16}*SharedItemsImports = 4
-		Fetch.SharedProject\Fetch.SharedProject.projitems*{9ebaadd8-4f72-46b2-b3a7-c8e869e7453d}*SharedItemsImports = 4
-		Fetch.SharedProject\Fetch.SharedProject.projitems*{a569d3fe-79a6-4a6f-80e3-66497997f859}*SharedItemsImports = 13
-		Fetch.SharedProject\Fetch.SharedProject.projitems*{d4a68fc8-841d-4d60-8edc-53e1e9b7c2fe}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

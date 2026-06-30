@@ -16,7 +16,10 @@ namespace Fetch
         public static Version DynamoVersion { get; set; }
         public static bool IsDynamoInMemory { get; set; }
         public static string DefaultDynamoPackagePath { get; set; }
+        public static string DefaultDynamoGraphRootPath =>
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FETCH Dynamo Graphs");
         public static string PackageURL { get; set; }
+        public static string DynamoGraphRootPath { get; set; }
 
         public static FileSystemWatcher PackageWatcher { get; set; }
         

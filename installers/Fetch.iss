@@ -85,12 +85,19 @@ Source: "..\_Release\2027\Fetch.dll"; DestDir: "{#RevitFiles27}"; Flags: ignorev
 
 [INI]
 Filename: "{#RevitFiles21}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2021
+Filename: "{#RevitFiles21}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2021
 Filename: "{#RevitFiles22}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2022
+Filename: "{#RevitFiles22}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2022
 Filename: "{#RevitFiles23}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2023
+Filename: "{#RevitFiles23}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2023
 Filename: "{#RevitFiles24}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2024
-Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2025
-Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2026
-Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2027
+Filename: "{#RevitFiles24}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2024
+Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath25}"; Components: Revit2025
+Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2025
+Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath26}"; Components: Revit2026
+Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2026
+Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath27}"; Components: Revit2027
+Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2027
 
 [Code]
 var
@@ -101,11 +108,15 @@ begin
   CustomQueryPage := CreateInputQueryPage(
     wpWelcome,
     'Welcome to FETCH',
-    'FETCH allows you to sync Dynamo packages from a local directory. (This can be a path like Dropbox, Google Drive, OneDrive, etc. As long as it is accessible in File Explorer, we should be good.)',
-    'Please paste the local directory path');
+    'FETCH allows you to sync Dynamo packages and Dynamo graphs from a local folder or a public package zip link. Supported cloud sources include public Google Drive, OneDrive, and SharePoint file links.',
+    'Please paste the default package source. Revit 2025-2027 can optionally use version-specific sources. The graph root is optional and defaults to Documents\FETCH Dynamo Graphs.');
 
   { Add items (False means it's not a password edit) }
-  CustomQueryPage.Add('Local Path:', False);
+  CustomQueryPage.Add('Default Package Source:', False);
+  CustomQueryPage.Add('Revit 2025 Source (optional):', False);
+  CustomQueryPage.Add('Revit 2026 Source (optional):', False);
+  CustomQueryPage.Add('Revit 2027 Source (optional):', False);
+  CustomQueryPage.Add('Dynamo Graph Root (optional):', False);
 end;
 
 procedure InitializeWizard();
@@ -118,4 +129,33 @@ end;
 function GetPackageExternalPath(Param: String): string;
 begin
 result := CustomQueryPage.Values[0];
+end;
+
+function GetPackageExternalPath25(Param: String): string;
+begin
+if CustomQueryPage.Values[1] <> '' then
+  result := CustomQueryPage.Values[1]
+else
+  result := CustomQueryPage.Values[0];
+end;
+
+function GetPackageExternalPath26(Param: String): string;
+begin
+if CustomQueryPage.Values[2] <> '' then
+  result := CustomQueryPage.Values[2]
+else
+  result := CustomQueryPage.Values[0];
+end;
+
+function GetPackageExternalPath27(Param: String): string;
+begin
+if CustomQueryPage.Values[3] <> '' then
+  result := CustomQueryPage.Values[3]
+else
+  result := CustomQueryPage.Values[0];
+end;
+
+function GetDynamoGraphRootPath(Param: String): string;
+begin
+result := CustomQueryPage.Values[4];
 end;

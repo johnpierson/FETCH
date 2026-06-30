@@ -9,6 +9,7 @@ namespace Fetch.Classes
 {
     internal class FetchIniFile
     {
+        private const int MaxIniValueLength = 4096;
         string Path;
         string EXE = Assembly.GetExecutingAssembly().GetName().Name;
 
@@ -25,8 +26,8 @@ namespace Fetch.Classes
 
         public string Read(string Key, string Section = null)
         {
-            var RetVal = new StringBuilder(255);
-            GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 255, Path);
+            var RetVal = new StringBuilder(MaxIniValueLength);
+            GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, MaxIniValueLength, Path);
             return RetVal.ToString();
         }
 
