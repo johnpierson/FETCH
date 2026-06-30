@@ -16,10 +16,10 @@
  <a href="https://www.buymeacoffee.com/j0hnp" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
 ## LICENSE
-This code is licensed primarily under [BSD 3-Clause](https://github.com/johnpierson/FETCH/blob/master/LICENSE) with a [Commons Clause License](https://commonsclause.com/) attached to that.
+This code is licensed primarily under [BSD 3-Clause](https://github.com/johnpierson/FETCH/blob/main/LICENSE) with a [Commons Clause License](https://commonsclause.com/) attached to that.
 
-## Current Version
-FETCH is currently built against the following Revit versions:
+## Supported Versions
+FETCH supports Revit 2025, Revit 2026, and Revit 2027 only.
 
 | Revit Version | Target Framework | API Package |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ FETCH is currently built against the following Revit versions:
 | 2027 | net10.0-windows | Nice3point Revit API 2027.* |
 
 ## Building
-Open `src/Fetch.sln` in Visual Studio and select the matching configuration for the Revit version you want to build, such as `Release R25` or `Debug R27`. All supported Revit versions build from the single `src/Fetch/Fetch.csproj` project file.
+Open `src/Fetch.sln` in Visual Studio and select the matching configuration for the Revit version you want to build: `Release R25`, `Release R26`, or `Release R27`. Debug builds use the matching `Debug R25`, `Debug R26`, or `Debug R27` configuration. All supported Revit versions build from the single `src/Fetch/Fetch.csproj` project file.
 
 ## Known Issues
 - N/A
@@ -51,7 +51,7 @@ Overall Folder
     Dynamo Graphs
 ```
 
-Version folders can be named `2025`, `Revit 2025`, or `R25` style. `Packages` sync to the matching Dynamo package location for the running Revit/Dynamo version. `Dynamo Graphs` sync to `Documents\FETCH Dynamo Graphs\<Revit Version>` unless the installer provides a custom Dynamo graph root folder.
+Version folders can be named `2025`, `Revit 2025`, or `R25` style for the supported 2025-2027 range. `Packages` sync to the matching Dynamo package location for the running Revit/Dynamo version. `Dynamo Graphs` sync to `Documents\FETCH Dynamo Graphs\<Revit Version>` unless the installer provides a custom Dynamo graph root folder.
 
 ## Contributors
 This package is primarily managed by the author of http://designtechunraveled.com and by [People Like You™](https://github.com/johnpierson/FETCH/graphs/contributors).
