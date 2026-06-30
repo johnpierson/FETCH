@@ -6,14 +6,6 @@
 #define MyAppPublisher "Design Tech Unraveled"
 #define MyAppURL "http://www.designtechunraveled.com/"
 #define RevitAddinsLocation "C:\ProgramData\Autodesk\Revit\Addins"
-#define RevitAddin21 RevitAddinsLocation+"\2021"
-#define RevitFiles21 RevitAddin21+"\FETCH"
-#define RevitAddin22 RevitAddinsLocation+"\2022"
-#define RevitFiles22 RevitAddin22+"\FETCH"
-#define RevitAddin23 RevitAddinsLocation+"\2023"
-#define RevitFiles23 RevitAddin23+"\FETCH"
-#define RevitAddin24 RevitAddinsLocation+"\2024"
-#define RevitFiles24 RevitAddin24+"\FETCH"
 #define RevitAddin25 RevitAddinsLocation+"\2025"
 #define RevitFiles25 RevitAddin25+"\FETCH"
 #define RevitAddin26 RevitAddinsLocation+"\2026"
@@ -44,31 +36,11 @@ SolidCompression=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Components]
-Name: "Revit2021"; Description: "fetch For Revit 2021";  Types: full custom;
-Name: "Revit2022"; Description: "fetch For Revit 2022";  Types: full custom;
-Name: "Revit2023"; Description: "fetch For Revit 2023";  Types: full custom;
-Name: "Revit2024"; Description: "fetch For Revit 2024";  Types: full custom;
 Name: "Revit2025"; Description: "fetch For Revit 2025";  Types: full custom;
 Name: "Revit2026"; Description: "fetch For Revit 2026";  Types: full custom;
 Name: "Revit2027"; Description: "fetch For Revit 2027";  Types: full custom;
 
 [Files]
-
-; Revit 2021
-Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin21}"; Flags: ignoreversion; Components: Revit2021
-Source: "..\_Release\2021\Fetch.dll"; DestDir: "{#RevitFiles21}"; Flags: ignoreversion; Components: Revit2021
-
-; Revit 2022
-Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin22}"; Flags: ignoreversion; Components: Revit2022
-Source: "..\_Release\2022\Fetch.dll"; DestDir: "{#RevitFiles22}"; Flags: ignoreversion ; Components: Revit2022
-
-; Revit 2023
-Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin23}"; Flags: ignoreversion; Components: Revit2023
-Source: "..\_Release\2023\Fetch.dll"; DestDir: "{#RevitFiles23}"; Flags: ignoreversion ; Components: Revit2023
-
-; Revit 2024
-Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin24}"; Flags: ignoreversion; Components: Revit2024
-Source: "..\_Release\2024\Fetch.dll"; DestDir: "{#RevitFiles24}"; Flags: ignoreversion ; Components: Revit2024
 
 ; Revit 2025
 Source: "..\_Release\Fetch.addin"; DestDir: "{#RevitAddin25}"; Flags: ignoreversion; Components: Revit2025
@@ -84,14 +56,6 @@ Source: "..\_Release\2027\Fetch.dll"; DestDir: "{#RevitFiles27}"; Flags: ignorev
 
 
 [INI]
-Filename: "{#RevitFiles21}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2021
-Filename: "{#RevitFiles21}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2021
-Filename: "{#RevitFiles22}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2022
-Filename: "{#RevitFiles22}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2022
-Filename: "{#RevitFiles23}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2023
-Filename: "{#RevitFiles23}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2023
-Filename: "{#RevitFiles24}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath}"; Components: Revit2024
-Filename: "{#RevitFiles24}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2024
 Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath25}"; Components: Revit2025
 Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2025
 Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath26}"; Components: Revit2026

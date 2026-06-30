@@ -23,10 +23,6 @@ FETCH is currently built against the following Revit versions:
 
 | Revit Version | Target Framework | API Package |
 | --- | --- | --- |
-| 2021 | .NET Framework 4.8 | Revit_All_Main_Versions_API_x64 2021.0.0 |
-| 2022 | .NET Framework 4.8 | Revit_All_Main_Versions_API_x64 2022.0.0 |
-| 2023 | .NET Framework 4.8 | Revit_All_Main_Versions_API_x64 2023.0.0 |
-| 2024 | .NET Framework 4.8 | Revit_All_Main_Versions_API_x64 2024.0.0 |
 | 2025 | net8.0-windows | Nice3point Revit API 2025.* |
 | 2026 | net8.0-windows | Nice3point Revit API 2026.* |
 | 2027 | net10.0-windows | Nice3point Revit API 2027.* |
