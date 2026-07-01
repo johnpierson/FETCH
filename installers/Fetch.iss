@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "FETCH for Revit"
-#define MyAppVersion "0.0.2"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Design Tech Unraveled"
 #define MyAppURL "http://www.designtechunraveled.com/"
 #define RevitAddinsLocation "C:\ProgramData\Autodesk\Revit\Addins"
@@ -72,7 +72,7 @@ begin
   CustomQueryPage := CreateInputQueryPage(
     wpWelcome,
     'Welcome to FETCH',
-    'FETCH allows you to sync Dynamo packages and Dynamo graphs from a local folder or a public package zip link. Supported cloud sources include public Google Drive, OneDrive, and SharePoint file links.',
+    'FETCH allows you to sync Dynamo packages and Dynamo graphs from a local folder or a public package zip link. Supported cloud sources include public Google Drive, OneDrive, SharePoint, and GitHub release links.',
     'Please paste the default package source. Revit 2025-2027 can optionally use version-specific sources. The graph root is optional and defaults to Documents\FETCH Dynamo Graphs.');
 
   { Add items (False means it's not a password edit) }

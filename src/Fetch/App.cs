@@ -41,7 +41,7 @@ namespace Fetch
             if (!Uri.TryCreate(Globals.PackageURL, UriKind.Absolute, out Uri packageUri) ||
                 (packageUri.Scheme != Uri.UriSchemeHttp && packageUri.Scheme != Uri.UriSchemeHttps))
             {
-                TaskDialog.Show("Fetch", "FetchSettings.ini must point to an existing local folder or an HTTP/HTTPS package zip URL.");
+                TaskDialog.Show("Fetch", "FetchSettings.ini must point to an existing local folder or a supported HTTP/HTTPS package source URL.");
                 return Result.Cancelled;
             }
 

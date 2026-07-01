@@ -4,6 +4,8 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Fetch
@@ -14,6 +16,8 @@ namespace Fetch
         private const string ONEDRIVE_DOMAIN = "onedrive.live.com";
         private const string ONEDRIVE_SHORT_DOMAIN = "1drv.ms";
         private const string SHAREPOINT_DOMAIN_SUFFIX = ".sharepoint.com";
+        private const string GITHUB_DOMAIN = "github.com";
+        private const string GITHUB_API_BASE_ADDRESS = "https://api.github.com/repos/";
         private const int GOOGLE_DRIVE_MAX_DOWNLOAD_ATTEMPT = 3;
 
         private readonly HttpClientHandler httpClientHandler;
@@ -40,6 +44,7 @@ namespace Fetch
             };
 
             httpClient = new HttpClient(httpClientHandler);
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("FETCH-Revit");
         }
 
         public void DownloadFile(string address, string fileName)
@@ -90,6 +95,12 @@ namespace Fetch
                 address = GetOneDriveDownloadAddress(address);
                 if (string.IsNullOrWhiteSpace(address))
                     throw new ArgumentException("The OneDrive URL is not a supported file download link.", nameof(address));
+            }
+            else if (IsGitHubReleaseAddress(address))
+            {
+                address = GetGitHubReleaseDownloadAddress(address);
+                if (string.IsNullOrWhiteSpace(address))
+                    throw new ArgumentException("The GitHub release URL is not a supported release asset link.", nameof(address));
             }
 
             downloadAddress = new Uri(address);
@@ -279,6 +290,20 @@ namespace Fetch
                     uri.Host.EndsWith(SHAREPOINT_DOMAIN_SUFFIX, StringComparison.OrdinalIgnoreCase));
         }
 
+        private bool IsGitHubReleaseAddress(string address)
+        {
+            Uri uri;
+            if (!Uri.TryCreate(address, UriKind.Absolute, out uri) ||
+                !string.Equals(uri.Host, GITHUB_DOMAIN, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            string[] pathParts = GetPathParts(uri);
+            return pathParts.Length >= 4 &&
+                   string.Equals(pathParts[2], "releases", StringComparison.OrdinalIgnoreCase);
+        }
+
         private string GetOneDriveDownloadAddress(string address)
         {
             Uri uri;
@@ -386,6 +411,82 @@ namespace Fetch
             return uriBuilder.Uri.AbsoluteUri;
         }
 
+        private string GetGitHubReleaseDownloadAddress(string address)
+        {
+            Uri uri;
+            if (!Uri.TryCreate(address, UriKind.Absolute, out uri))
+                return string.Empty;
+
+            string[] pathParts = GetPathParts(uri);
+            if (pathParts.Length < 4 ||
+                !string.Equals(pathParts[2], "releases", StringComparison.OrdinalIgnoreCase))
+            {
+                return string.Empty;
+            }
+
+            if (string.Equals(pathParts[3], "download", StringComparison.OrdinalIgnoreCase))
+                return address;
+
+            string releaseEndpoint;
+            if (string.Equals(pathParts[3], "latest", StringComparison.OrdinalIgnoreCase))
+            {
+                releaseEndpoint = "latest";
+            }
+            else if (string.Equals(pathParts[3], "tag", StringComparison.OrdinalIgnoreCase) && pathParts.Length >= 5)
+            {
+                string tagName = Uri.EscapeDataString(Uri.UnescapeDataString(pathParts[4]));
+                releaseEndpoint = $"tags/{tagName}";
+            }
+            else
+            {
+                return string.Empty;
+            }
+
+            string apiAddress = string.Concat(
+                GITHUB_API_BASE_ADDRESS,
+                Uri.EscapeDataString(pathParts[0]),
+                "/",
+                Uri.EscapeDataString(pathParts[1]),
+                "/releases/",
+                releaseEndpoint);
+
+            using (HttpResponseMessage response = httpClient.GetAsync(apiAddress).GetAwaiter().GetResult())
+            {
+                response.EnsureSuccessStatusCode();
+                string releaseJson = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                GitHubRelease release = JsonSerializer.Deserialize<GitHubRelease>(releaseJson);
+                GitHubReleaseAsset asset = SelectGitHubReleaseAsset(release);
+
+                if (asset == null || string.IsNullOrWhiteSpace(asset.BrowserDownloadUrl))
+                    throw new InvalidOperationException("The GitHub release does not contain a downloadable .zip asset.");
+
+                return asset.BrowserDownloadUrl;
+            }
+        }
+
+        private GitHubReleaseAsset SelectGitHubReleaseAsset(GitHubRelease release)
+        {
+            if (release == null || release.Assets == null || release.Assets.Length == 0)
+                return null;
+
+            foreach (GitHubReleaseAsset asset in release.Assets)
+            {
+                if (asset != null &&
+                    !string.IsNullOrWhiteSpace(asset.Name) &&
+                    asset.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                {
+                    return asset;
+                }
+            }
+
+            return null;
+        }
+
+        private string[] GetPathParts(Uri uri)
+        {
+            return uri.AbsolutePath.Trim('/').Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
         public void Dispose()
         {
             httpClient.Dispose();
@@ -407,6 +508,21 @@ namespace Fetch
                     return 0;
                 }
             }
+        }
+
+        private class GitHubRelease
+        {
+            [JsonPropertyName("assets")]
+            public GitHubReleaseAsset[] Assets { get; set; }
+        }
+
+        private class GitHubReleaseAsset
+        {
+            [JsonPropertyName("name")]
+            public string Name { get; set; }
+
+            [JsonPropertyName("browser_download_url")]
+            public string BrowserDownloadUrl { get; set; }
         }
     }
 }

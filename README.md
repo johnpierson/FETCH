@@ -29,7 +29,9 @@ Open `src/Fetch.sln` in Visual Studio and select the matching configuration for 
 - N/A
 
 ## Package Sources
-FETCH can sync packages from a local folder, a direct HTTP/HTTPS zip URL, a public Google Drive file link, or a public OneDrive/SharePoint file link. Private cloud links that require sign-in are not supported.
+FETCH can sync packages from a local folder, a direct HTTP/HTTPS zip URL, a public Google Drive file link, a public OneDrive/SharePoint file link, or a public GitHub release. Private cloud links that require sign-in are not supported.
+
+For GitHub releases, use either a release page such as `https://github.com/org/repo/releases/latest` or `https://github.com/org/repo/releases/tag/v1.0.0`, or a direct release asset URL such as `https://github.com/org/repo/releases/download/v1.0.0/packages.zip`. Release pages must include an uploaded `.zip` release asset; FETCH selects the first `.zip` asset.
 
 FETCH also supports a firm-managed source folder or zip with this structure:
 
