@@ -20,6 +20,7 @@ namespace Fetch
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FETCH Dynamo Graphs");
         public static string PackageURL { get; set; }
         public static string DynamoGraphRootPath { get; set; }
+        public static string SettingsPath { get; set; }
 
         public static FileSystemWatcher PackageWatcher { get; set; }
         

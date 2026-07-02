@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "FETCH for Revit"
-#define MyAppVersion "1.0.1"
+#define MyAppVersion "1.0.2"
 #define MyAppPublisher "Design Tech Unraveled"
 #define MyAppURL "http://www.designtechunraveled.com/"
 #define RevitAddinsLocation "C:\ProgramData\Autodesk\Revit\Addins"

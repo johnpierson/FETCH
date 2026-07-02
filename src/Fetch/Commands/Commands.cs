@@ -11,11 +11,12 @@ namespace Fetch.Commands
         public static void ReadIni()
         {
             var fetchIni = new FetchIniFile();
-            Globals.PackageURL = fetchIni.Read("Path", "Settings");
+            Globals.SettingsPath = fetchIni.FilePath;
+            Globals.PackageURL = fetchIni.Read("Path", "Settings").Trim();
             string graphRootPath = fetchIni.Read("GraphPath", "Settings");
             Globals.DynamoGraphRootPath = string.IsNullOrWhiteSpace(graphRootPath)
                 ? Globals.DefaultDynamoGraphRootPath
-                : graphRootPath;
+                : graphRootPath.Trim();
         }
 
         /// <summary>
