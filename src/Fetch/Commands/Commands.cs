@@ -129,29 +129,37 @@ namespace Fetch.Commands
             string layoutRoot = NormalizeExtractedRoot(normalizedSourceDirectory);
             string versionDirectory = FindVersionDirectory(layoutRoot);
 
-            if (versionDirectory == null)
+            if (versionDirectory != null)
             {
                 return new SourceLayout
                 {
-                    PackageSourceDirectory = layoutRoot,
-                    GraphSourceDirectory = FindNamedChildDirectory(layoutRoot, "Dynamo Graphs", "DynamoGraphs", "Graphs")
+                    PackageSourceDirectory = FindNamedChildDirectory(versionDirectory, "Packages", "Package"),
+                    GraphSourceDirectory = FindNamedChildDirectory(versionDirectory, "Dynamo Graphs", "DynamoGraphs", "Graphs")
                 };
             }
 
-            string packageDirectory = FindNamedChildDirectory(versionDirectory, "Packages", "Package");
-            string graphDirectory = FindNamedChildDirectory(versionDirectory, "Dynamo Graphs", "DynamoGraphs", "Graphs");
+            if (ContainsVersionDirectory(layoutRoot))
+            {
+                throw new DirectoryNotFoundException(
+                    $"The deployment does not contain a folder for Revit {Globals.RevitVersion}: {layoutRoot}");
+            }
+
+            string packageDirectory = FindNamedChildDirectory(layoutRoot, "Packages", "Package");
 
             return new SourceLayout
             {
-                PackageSourceDirectory = packageDirectory,
-                GraphSourceDirectory = graphDirectory
+                // Preserve support for older sources that point directly at a package folder.
+                PackageSourceDirectory = packageDirectory ?? layoutRoot,
+                GraphSourceDirectory = FindNamedChildDirectory(layoutRoot, "Dynamo Graphs", "DynamoGraphs", "Graphs")
             };
         }
 
         private static string NormalizeExtractedRoot(string sourceDirectory)
         {
             string versionDirectory = FindVersionDirectory(sourceDirectory);
-            if (versionDirectory != null || ContainsExpectedSourceFolder(sourceDirectory))
+            if (versionDirectory != null ||
+                ContainsVersionDirectory(sourceDirectory) ||
+                ContainsExpectedSourceFolder(sourceDirectory))
             {
                 return sourceDirectory;
             }
@@ -160,7 +168,9 @@ namespace Fetch.Commands
             if (childDirectories.Length == 1)
             {
                 string childDirectory = childDirectories[0];
-                if (FindVersionDirectory(childDirectory) != null || ContainsExpectedSourceFolder(childDirectory))
+                if (FindVersionDirectory(childDirectory) != null ||
+                    ContainsVersionDirectory(childDirectory) ||
+                    ContainsExpectedSourceFolder(childDirectory))
                 {
                     return childDirectory;
                 }
@@ -192,6 +202,19 @@ namespace Fetch.Commands
             return null;
         }
 
+        private static bool ContainsVersionDirectory(string sourceDirectory)
+        {
+            foreach (string childDirectory in Directory.GetDirectories(sourceDirectory))
+            {
+                if (IsAnyRevitVersionDirectoryName(new DirectoryInfo(childDirectory).Name))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static bool IsVersionDirectoryName(string directoryName)
         {
             string normalizedName = directoryName.ToLowerInvariant().Replace(" ", "").Replace("_", "").Replace("-", "");
@@ -201,6 +224,27 @@ namespace Fetch.Commands
             return normalizedName == revitVersion ||
                    normalizedName == $"revit{revitVersion}" ||
                    normalizedName == $"r{shortVersion}";
+        }
+
+        private static bool IsAnyRevitVersionDirectoryName(string directoryName)
+        {
+            string normalizedName = directoryName.ToLowerInvariant().Replace(" ", "").Replace("_", "").Replace("-", "");
+            if (normalizedName.StartsWith("revit", StringComparison.Ordinal))
+            {
+                normalizedName = normalizedName.Substring(5);
+            }
+            else if (normalizedName.StartsWith("r", StringComparison.Ordinal))
+            {
+                normalizedName = normalizedName.Substring(1);
+            }
+
+            if (!int.TryParse(normalizedName, out int version))
+            {
+                return false;
+            }
+
+            return (version >= 2000 && version <= 2099) ||
+                   (version >= 0 && version <= 99);
         }
 
         private static string FindNamedChildDirectory(string sourceDirectory, params string[] directoryNames)

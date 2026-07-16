@@ -100,7 +100,7 @@ namespace Fetch
             {
                 address = GetGitHubReleaseDownloadAddress(address);
                 if (string.IsNullOrWhiteSpace(address))
-                    throw new ArgumentException("The GitHub release URL is not a supported release asset link.", nameof(address));
+                    throw new ArgumentException("The GitHub release URL is not a supported release page or release zip asset.", nameof(address));
             }
 
             downloadAddress = new Uri(address);
@@ -424,15 +424,17 @@ namespace Fetch
                 return string.Empty;
             }
 
-            if (string.Equals(pathParts[3], "download", StringComparison.OrdinalIgnoreCase))
-                return address;
-
             string releaseEndpoint;
-            if (string.Equals(pathParts[3], "latest", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(pathParts[3], "download", StringComparison.OrdinalIgnoreCase))
+            {
+                return address;
+            }
+            else if (string.Equals(pathParts[3], "latest", StringComparison.OrdinalIgnoreCase))
             {
                 releaseEndpoint = "latest";
             }
-            else if (string.Equals(pathParts[3], "tag", StringComparison.OrdinalIgnoreCase) && pathParts.Length >= 5)
+            else if (pathParts.Length >= 5 &&
+                     string.Equals(pathParts[3], "tag", StringComparison.OrdinalIgnoreCase))
             {
                 string tagName = Uri.EscapeDataString(Uri.UnescapeDataString(pathParts[4]));
                 releaseEndpoint = $"tags/{tagName}";

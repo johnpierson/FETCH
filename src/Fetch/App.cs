@@ -12,7 +12,7 @@ namespace Fetch
         private static readonly Dictionary<string, string[]> RevitDynamoVersionMap = new Dictionary<string, string[]>
         {
             { "2027", new[] { "4.1", "4.0" } },
-            { "2026", new[] { "3.6", "3.5", "3.4" } },
+            { "2026", new[] { "4.0", "3.6", "3.5", "3.4" } },
             { "2025", new[] { "3.3", "3.2", "3.0" } }
         };
 
@@ -114,7 +114,14 @@ namespace Fetch
             if (dynamoRevit != null)
             {
                 Version assemblyVersion = dynamoRevit.GetName().Version;
-                versions.Add(new Version(assemblyVersion.Major, assemblyVersion.Minor));
+                Version selectorVersion = new Version(assemblyVersion.Major, assemblyVersion.Minor);
+
+                // Newer selectors may use the Revit release (for example 27.0)
+                // instead of the bundled Dynamo release as their assembly version.
+                if (!IsRevitSelectorVersion(selectorVersion))
+                {
+                    versions.Add(selectorVersion);
+                }
             }
 
             if (RevitDynamoVersionMap.TryGetValue(Globals.RevitVersion, out string[] mappedVersions))
@@ -125,6 +132,18 @@ namespace Fetch
             return versions
                 .GroupBy(v => $"{v.Major}.{v.Minor}")
                 .Select(g => g.First());
+        }
+
+        private static bool IsRevitSelectorVersion(Version selectorVersion)
+        {
+            if (!int.TryParse(Globals.RevitVersion, out int revitYear))
+            {
+                return false;
+            }
+
+            int shortRevitVersion = revitYear % 2000;
+            return selectorVersion.Major == revitYear ||
+                   selectorVersion.Major == shortRevitVersion;
         }
 
         private static IEnumerable<string> GetDynamoPackagePathCandidates(Version dynamoVersion)
