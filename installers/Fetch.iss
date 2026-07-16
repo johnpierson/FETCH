@@ -2,10 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "FETCH for Revit"
-#define MyAppVersion "1.0.2"
+#define MyAppVersion "1.0.3"
 #define MyAppPublisher "Design Tech Unraveled"
 #define MyAppURL "http://www.designtechunraveled.com/"
-#define RevitAddinsLocation "C:\ProgramData\Autodesk\Revit\Addins"
+#define RevitAddinsLocation "{userappdata}\Autodesk\Revit\Addins"
 #define RevitAddin25 RevitAddinsLocation+"\2025"
 #define RevitFiles25 RevitAddin25+"\FETCH"
 #define RevitAddin26 RevitAddinsLocation+"\2026"
@@ -22,6 +22,7 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 
 CreateAppDir=no
+PrivilegesRequired=lowest
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -56,12 +57,12 @@ Source: "..\_Release\2027\Fetch.dll"; DestDir: "{#RevitFiles27}"; Flags: ignorev
 
 
 [INI]
-Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath25}"; Components: Revit2025
-Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2025
-Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath26}"; Components: Revit2026
-Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2026
-Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath27}"; Components: Revit2027
-Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Components: Revit2027
+Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath25}"; Flags: uninsdeleteentry; Components: Revit2025
+Filename: "{#RevitFiles25}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Flags: uninsdeleteentry; Components: Revit2025
+Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath26}"; Flags: uninsdeleteentry; Components: Revit2026
+Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Flags: uninsdeleteentry; Components: Revit2026
+Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath27}"; Flags: uninsdeleteentry; Components: Revit2027
+Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Flags: uninsdeleteentry; Components: Revit2027
 
 [Code]
 var

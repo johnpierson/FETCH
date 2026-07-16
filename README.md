@@ -16,6 +16,16 @@ This code is licensed primarily under [BSD 3-Clause](https://github.com/johnpier
 ## Supported Versions
 FETCH supports Revit 2025, Revit 2026, and Revit 2027 only.
 
+The installer deploys FETCH per user without requiring administrator rights. Add-in manifests, binaries, and settings are installed under:
+
+```text
+%APPDATA%\Autodesk\Revit\Addins\<Revit Version>\
+  Fetch.addin
+  FETCH\
+    Fetch.dll
+    FetchSettings.ini
+```
+
 | Revit Version | Target Framework | API Package |
 | --- | --- | --- |
 | 2025 | net8.0-windows | Nice3point Revit API 2025.* |
