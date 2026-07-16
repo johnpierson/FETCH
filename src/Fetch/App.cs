@@ -9,13 +9,6 @@ namespace Fetch
 {
     internal class App : IExternalApplication
     {
-        private static readonly Dictionary<string, string[]> RevitDynamoVersionMap = new Dictionary<string, string[]>
-        {
-            { "2027", new[] { "4.1", "4.0" } },
-            { "2026", new[] { "4.0", "3.6", "3.5", "3.4" } },
-            { "2025", new[] { "3.3", "3.2", "3.0" } }
-        };
-
         public Result OnStartup(UIControlledApplication application)
         {
             //store revit version 
@@ -80,7 +73,9 @@ namespace Fetch
         {
             var dynamoRevit = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.FullName.Contains("DynamoRevitVersionSelector"));
 
-            List<Version> dynamoVersions = GetDynamoVersionCandidates(dynamoRevit).ToList();
+            List<Version> dynamoVersions = DynamoVersionResolver
+                .GetVersionCandidates(dynamoRevit, Globals.RevitVersion)
+                .ToList();
             if (dynamoVersions.Count == 0)
             {
                 return false;
@@ -88,7 +83,10 @@ namespace Fetch
 
             foreach (Version dynamoVersion in dynamoVersions)
             {
-                foreach (string packagePath in GetDynamoPackagePathCandidates(dynamoVersion))
+                foreach (string packagePath in DynamoVersionResolver.GetPackagePathCandidates(
+                    dynamoVersion,
+                    Globals.UserRoaming,
+                    Globals.RevitVersion))
                 {
                     if (!Directory.Exists(packagePath))
                     {
@@ -102,64 +100,14 @@ namespace Fetch
             }
 
             Globals.DynamoVersion = dynamoVersions[0];
-            Globals.DefaultDynamoPackagePath = GetDynamoPackagePathCandidates(Globals.DynamoVersion).First();
+            Globals.DefaultDynamoPackagePath = DynamoVersionResolver
+                .GetPackagePathCandidates(
+                    Globals.DynamoVersion,
+                    Globals.UserRoaming,
+                    Globals.RevitVersion)
+                .First();
 
             return true;
-        }
-
-        private static IEnumerable<Version> GetDynamoVersionCandidates(System.Reflection.Assembly dynamoRevit)
-        {
-            var versions = new List<Version>();
-
-            if (dynamoRevit != null)
-            {
-                Version assemblyVersion = dynamoRevit.GetName().Version;
-                Version selectorVersion = new Version(assemblyVersion.Major, assemblyVersion.Minor);
-
-                // Newer selectors may use the Revit release (for example 27.0)
-                // instead of the bundled Dynamo release as their assembly version.
-                if (!IsRevitSelectorVersion(selectorVersion))
-                {
-                    versions.Add(selectorVersion);
-                }
-            }
-
-            if (RevitDynamoVersionMap.TryGetValue(Globals.RevitVersion, out string[] mappedVersions))
-            {
-                versions.AddRange(mappedVersions.Select(Version.Parse));
-            }
-
-            return versions
-                .GroupBy(v => $"{v.Major}.{v.Minor}")
-                .Select(g => g.First());
-        }
-
-        private static bool IsRevitSelectorVersion(Version selectorVersion)
-        {
-            if (!int.TryParse(Globals.RevitVersion, out int revitYear))
-            {
-                return false;
-            }
-
-            int shortRevitVersion = revitYear % 2000;
-            return selectorVersion.Major == revitYear ||
-                   selectorVersion.Major == shortRevitVersion;
-        }
-
-        private static IEnumerable<string> GetDynamoPackagePathCandidates(Version dynamoVersion)
-        {
-            string versionFolder = $"{dynamoVersion.Major}.{dynamoVersion.Minor}";
-
-            if (dynamoVersion.Major >= 4)
-            {
-                yield return Path.Combine(Globals.UserRoaming, "Dynamo", "Dynamo Core", versionFolder, "packages");
-                yield return Path.Combine(Globals.UserRoaming, "Dynamo", "Dynamo Revit", versionFolder, "packages");
-            }
-            else
-            {
-                yield return Path.Combine(Globals.UserRoaming, "Dynamo", "Dynamo Revit", versionFolder, "packages");
-                yield return Path.Combine(Globals.UserRoaming, "Dynamo", "Dynamo Core", versionFolder, "packages");
-            }
         }
 
         /// <summary>
