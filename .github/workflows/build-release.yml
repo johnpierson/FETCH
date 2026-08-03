@@ -46,9 +46,12 @@ jobs:
             8.0.x
             10.0.x
 
-      - name: Restore with locked dependencies
+      # Package versions are pinned in Fetch.csproj rather than held in a lock file, because the
+      # R25 and R26 configurations share a target framework but need different versions, which a
+      # single lock file cannot express.
+      - name: Restore
         shell: pwsh
-        run: dotnet restore $env:FETCH_SOLUTION --locked-mode -p:Configuration="Release R25"
+        run: dotnet restore $env:FETCH_SOLUTION -p:Configuration="Release R25"
 
       - name: Run tests
         shell: pwsh
@@ -121,7 +124,7 @@ jobs:
           )
 
           foreach ($configuration in $configurations) {
-            dotnet build $env:FETCH_PROJECT --configuration $configuration -p:FetchInstallLocal=false --locked-mode
+            dotnet build $env:FETCH_PROJECT --configuration $configuration -p:FetchInstallLocal=false
             if ($LASTEXITCODE -ne 0) {
               exit $LASTEXITCODE
             }
