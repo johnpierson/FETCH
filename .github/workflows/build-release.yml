@@ -130,19 +130,43 @@ jobs:
             }
           }
 
-      - name: Install Inno Setup
+      # The runner image ships Inno Setup, so use it rather than forcing a pinned version over the
+      # top of it. The version actually used is logged, so a release can be traced back to it.
+      - name: Locate Inno Setup
+        id: inno
         shell: pwsh
-        run: choco install innosetup --version=6.2.2 --no-progress --yes
+        run: |
+          function Find-Iscc {
+            @(
+              "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+              "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+            ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+          }
+
+          $iscc = Find-Iscc
+
+          if (-not $iscc) {
+            Write-Host "Inno Setup not present on the runner; installing."
+            choco install innosetup --no-progress --yes
+            if ($LASTEXITCODE -ne 0) {
+              throw "Failed to install Inno Setup."
+            }
+
+            $iscc = Find-Iscc
+          }
+
+          if (-not $iscc) {
+            throw "Inno Setup compiler not found after installation."
+          }
+
+          $version = (Get-Item $iscc).VersionInfo.ProductVersion
+          Write-Host "Using Inno Setup $version at $iscc"
+          "iscc=$iscc" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Build installer
         shell: pwsh
         run: |
-          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-          if (!(Test-Path $iscc)) {
-            throw "Inno Setup compiler not found at $iscc"
-          }
-
-          & $iscc "/DMyAppVersion=${{ steps.version.outputs.version }}" $env:FETCH_INSTALLER
+          & "${{ steps.inno.outputs.iscc }}" "/DMyAppVersion=${{ steps.version.outputs.version }}" $env:FETCH_INSTALLER
           if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
           }
