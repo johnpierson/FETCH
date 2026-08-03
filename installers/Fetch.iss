@@ -2,7 +2,11 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "FETCH for Revit"
-#define MyAppVersion "1.0.4"
+; Supplied by the build via ISCC /DMyAppVersion=x.y.z so that the installer, the assembly and the
+; release tag can never disagree. The fallback keeps a manual local build working.
+#ifndef MyAppVersion
+  #define MyAppVersion "0.0.0-local"
+#endif
 #define MyAppPublisher "Design Tech Unraveled"
 #define MyAppURL "http://www.designtechunraveled.com/"
 #define RevitAddinsLocation "{userappdata}\Autodesk\Revit\Addins"
@@ -37,9 +41,9 @@ SolidCompression=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Components]
-Name: "Revit2025"; Description: "fetch For Revit 2025";  Types: full custom;
-Name: "Revit2026"; Description: "fetch For Revit 2026";  Types: full custom;
-Name: "Revit2027"; Description: "fetch For Revit 2027";  Types: full custom;
+Name: "Revit2025"; Description: "FETCH for Revit 2025";  Types: full custom;
+Name: "Revit2026"; Description: "FETCH for Revit 2026";  Types: full custom;
+Name: "Revit2027"; Description: "FETCH for Revit 2027";  Types: full custom;
 
 [Files]
 
@@ -63,6 +67,23 @@ Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "Path";
 Filename: "{#RevitFiles26}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Flags: uninsdeleteentry; Components: Revit2026
 Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "Path"; String: "{code:GetPackageExternalPath27}"; Flags: uninsdeleteentry; Components: Revit2027
 Filename: "{#RevitFiles27}\FetchSettings.ini"; Section: "Settings"; Key: "GraphPath"; String: "{code:GetDynamoGraphRootPath}"; Flags: uninsdeleteentry; Components: Revit2027
+
+[UninstallDelete]
+; The settings file is created by this installer, so uninstalling should remove it rather than
+; leaving orphaned configuration behind. Synced packages and graphs are deliberately left alone:
+; they are the user's Dynamo content, not ours to delete.
+Type: files; Name: "{#RevitFiles25}\FetchSettings.ini"
+Type: files; Name: "{#RevitFiles25}\FetchLog.txt"
+Type: files; Name: "{#RevitFiles25}\FetchLog.previous.txt"
+Type: dirifempty; Name: "{#RevitFiles25}"
+Type: files; Name: "{#RevitFiles26}\FetchSettings.ini"
+Type: files; Name: "{#RevitFiles26}\FetchLog.txt"
+Type: files; Name: "{#RevitFiles26}\FetchLog.previous.txt"
+Type: dirifempty; Name: "{#RevitFiles26}"
+Type: files; Name: "{#RevitFiles27}\FetchSettings.ini"
+Type: files; Name: "{#RevitFiles27}\FetchLog.txt"
+Type: files; Name: "{#RevitFiles27}\FetchLog.previous.txt"
+Type: dirifempty; Name: "{#RevitFiles27}"
 
 [Code]
 var
@@ -89,12 +110,107 @@ begin
   AddCustomQueryPage();
 end;
 
-
-
-function GetPackageExternalPath(Param: String): string;
+{ Accepts a local/UNC folder or an https:// link. Plain http:// is refused for the same reason the
+  add-in refuses it: the download becomes code that Revit loads. }
+function IsAcceptableSource(Source: String): Boolean;
 begin
-result := CustomQueryPage.Values[0];
+  Source := Trim(Source);
+
+  if Source = '' then
+  begin
+    Result := False;
+    Exit;
+  end;
+
+  if (Pos('https://', Lowercase(Source)) = 1) or DirExists(Source) then
+  begin
+    Result := True;
+    Exit;
+  end;
+
+  Result := False;
 end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+var
+  DefaultSource: String;
+begin
+  Result := True;
+
+  if CurPageID <> CustomQueryPage.ID then
+    Exit;
+
+  DefaultSource := Trim(CustomQueryPage.Values[0]);
+
+  { A blank source used to install cleanly and then show an error on every Revit start, with no way
+    to fix it but hand-editing the INI. }
+  if DefaultSource = '' then
+  begin
+    MsgBox('Enter a default package source: a folder FETCH can read, or an https:// link to a package zip.',
+      mbError, MB_OK);
+    Result := False;
+    Exit;
+  end;
+
+  if not IsAcceptableSource(DefaultSource) then
+  begin
+    if Pos('http://', Lowercase(DefaultSource)) = 1 then
+    begin
+      MsgBox('Plain http:// sources are not supported, because anyone on the network could replace the packages Revit loads.'
+        + #13#10#13#10 + 'Use an https:// link instead.', mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+
+    if MsgBox('FETCH could not confirm that this package source exists:' + #13#10#13#10 + DefaultSource
+      + #13#10#13#10 + 'Install anyway?', mbConfirmation, MB_YESNO) = IDNO then
+      Result := False;
+  end;
+end;
+
+{ Earlier releases installed FETCH for all users under ProgramData. Those files are not removed by
+  this per-user installer and would otherwise keep loading alongside it, running the sync twice, and
+  their settings file takes precedence over the per-user one. }
+procedure RemoveLegacyMachineWideInstall();
+var
+  LegacyRoot: String;
+  Versions: array[0..2] of String;
+  Index: Integer;
+  Manifest: String;
+  FilesDir: String;
+begin
+  Versions[0] := '2025';
+  Versions[1] := '2026';
+  Versions[2] := '2027';
+
+  LegacyRoot := ExpandConstant('{commonappdata}\Autodesk\Revit\Addins');
+
+  for Index := 0 to 2 do
+  begin
+    Manifest := LegacyRoot + '\' + Versions[Index] + '\Fetch.addin';
+    FilesDir := LegacyRoot + '\' + Versions[Index] + '\FETCH';
+
+    if FileExists(Manifest) then
+    begin
+      if not DeleteFile(Manifest) then
+        Log('Could not remove the legacy manifest: ' + Manifest);
+    end;
+
+    if DirExists(FilesDir) then
+    begin
+      if not DelTree(FilesDir, True, True, True) then
+        Log('Could not remove the legacy install folder: ' + FilesDir);
+    end;
+  end;
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssPostInstall then
+    RemoveLegacyMachineWideInstall();
+end;
+
+
 
 function GetPackageExternalPath25(Param: String): string;
 begin
