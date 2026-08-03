@@ -6,25 +6,42 @@
     <PlatformTarget>x64</PlatformTarget>
     <RootNamespace>Fetch</RootNamespace>
     <AssemblyName>Fetch</AssemblyName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PublishAddinFiles>true</PublishAddinFiles>
+    <!--
+      Single source of truth for the release version. The installer receives it via ISCC /D and CI
+      checks it against the release tag, so a release cannot ship a mismatched version.
+    -->
+    <Version>1.0.4</Version>
+    <Product>Fetch</Product>
+    <Company>Design Tech Unraveled</Company>
+    <Copyright>Copyright © 2023 Design Tech Unraveled</Copyright>
+    <Description>A plugin for Revit to help manage Dynamo packages.</Description>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <NuGetAuditMode>all</NuGetAuditMode>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DefaultItemExcludes>$(DefaultItemExcludes);obj\**</DefaultItemExcludes>
     <Configurations>Debug R25;Debug R26;Debug R27</Configurations>
     <Configurations>$(Configurations);Release R25;Release R26;Release R27</Configurations>
   </PropertyGroup>
 
+  <!--
+    Revit API package versions are pinned rather than floating (2025.* and friends). A wildcard
+    means the same tag rebuilt later can produce different binaries, which makes a release
+    impossible to reproduce or debug. Bump these deliberately.
+  -->
   <PropertyGroup Condition="$(Configuration.Contains('R25'))">
     <RevitVersion>2025</RevitVersion>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <RevitApiVersion>2025.4.50</RevitApiVersion>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('R26'))">
     <RevitVersion>2026</RevitVersion>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <RevitApiVersion>2026.4.10</RevitApiVersion>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('R27'))">
     <RevitVersion>2027</RevitVersion>
     <TargetFramework>net10.0-windows</TargetFramework>
+    <RevitApiVersion>2027.2.0</RevitApiVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -33,22 +50,38 @@
     <StartArguments>/language ENG</StartArguments>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <FetchLocalAddinRoot>$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)</FetchLocalAddinRoot>
+    <FetchReleaseRoot>$(MSBuildThisFileDirectory)..\..\_Release</FetchReleaseRoot>
+    <!--
+      Debug builds install into the local Revit Addins folder so F5 debugging launches Revit with
+      the current build. Pass -p:FetchInstallLocal=false to suppress it (automated builds and test
+      runs do this), or -p:FetchInstallLocal=true to install a Release build on demand.
+    -->
+    <FetchInstallLocal Condition="'$(FetchInstallLocal)' == '' And $(Configuration.Contains('Debug'))">true</FetchInstallLocal>
+    <FetchInstallLocal Condition="'$(FetchInstallLocal)' == ''">false</FetchInstallLocal>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="Fetch.addin" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nice3point.Revit.Build.Tasks" Version="2.*" PrivateAssets="All" />
-    <PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
-    <PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
+    <PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitApiVersion)" />
+    <PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitApiVersion)" />
   </ItemGroup>
 
-  <Target Name="CopyFetchArtifacts" AfterTargets="Build">
-    <MakeDir Directories="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Fetch" Condition="$(Configuration.Contains('Debug'))" />
-    <Copy SourceFiles="Fetch.addin" DestinationFolder="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)" Condition="$(Configuration.Contains('Debug'))" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AppData)\Autodesk\REVIT\Addins\$(RevitVersion)\Fetch" Condition="$(Configuration.Contains('Debug'))" />
-    <MakeDir Directories="$(MSBuildThisFileDirectory)..\..\_Release\$(RevitVersion)" Condition="$(Configuration.Contains('Release'))" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MSBuildThisFileDirectory)..\..\_Release\$(RevitVersion)" Condition="$(Configuration.Contains('Release'))" />
-    <Copy SourceFiles="Fetch.addin" DestinationFolder="$(MSBuildThisFileDirectory)..\..\_Release" Condition="$(Configuration.Contains('Release'))" />
+  <!-- Opt-in local installation; see FetchInstallLocal above. -->
+  <Target Name="InstallLocal" AfterTargets="Build" Condition="'$(FetchInstallLocal)' == 'true'">
+    <MakeDir Directories="$(FetchLocalAddinRoot)\Fetch" />
+    <Copy SourceFiles="Fetch.addin" DestinationFolder="$(FetchLocalAddinRoot)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(FetchLocalAddinRoot)\Fetch" />
+    <Message Importance="high" Text="FETCH installed to $(FetchLocalAddinRoot)" />
+  </Target>
+
+  <Target Name="CopyReleaseArtifacts" AfterTargets="Build" Condition="$(Configuration.Contains('Release'))">
+    <MakeDir Directories="$(FetchReleaseRoot)\$(RevitVersion)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(FetchReleaseRoot)\$(RevitVersion)" />
+    <Copy SourceFiles="Fetch.addin" DestinationFolder="$(FetchReleaseRoot)" />
   </Target>
 </Project>
