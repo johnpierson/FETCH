@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <RootNamespace>Fetch.Tests</RootNamespace>
+    <AssemblyName>Fetch.Tests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- Mirrors Fetch.csproj so the project reference resolves a concrete TargetFramework. -->
+    <Configurations>Debug R25;Debug R26;Debug R27</Configurations>
+    <Configurations>$(Configurations);Release R25;Release R26;Release R27</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration.Contains('R25'))">
+    <TargetFramework>net8.0-windows</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R26'))">
+    <TargetFramework>net8.0-windows</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration.Contains('R27'))">
+    <TargetFramework>net10.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Running tests must never install the add-in into the developer's live Revit folder. -->
+    <ProjectReference Include="..\..\src\Fetch\Fetch.csproj">
+      <AdditionalProperties>FetchInstallLocal=false</AdditionalProperties>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
