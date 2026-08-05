@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fetch", "Fetch\Fetch.csproj", "{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fetch.Tests", "..\tests\Fetch.Tests\Fetch.Tests.csproj", "{E43A39C5-7AE0-4A48-91F5-546DF448100D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug R25|Any CPU = Debug R25|Any CPU
@@ -27,6 +29,18 @@ Global
 		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R26|Any CPU.Build.0 = Release R26|Any CPU
 		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R27|Any CPU.ActiveCfg = Release R27|Any CPU
 		{22899425-3C38-4BE1-9F6C-AB0B1F8A2029}.Release R27|Any CPU.Build.0 = Release R27|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Debug R25|Any CPU.ActiveCfg = Debug R25|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Debug R25|Any CPU.Build.0 = Debug R25|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Debug R26|Any CPU.ActiveCfg = Debug R26|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Debug R26|Any CPU.Build.0 = Debug R26|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Debug R27|Any CPU.ActiveCfg = Debug R27|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Debug R27|Any CPU.Build.0 = Debug R27|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Release R25|Any CPU.ActiveCfg = Release R25|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Release R25|Any CPU.Build.0 = Release R25|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Release R26|Any CPU.ActiveCfg = Release R26|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Release R26|Any CPU.Build.0 = Release R26|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Release R27|Any CPU.ActiveCfg = Release R27|Any CPU
+		{E43A39C5-7AE0-4A48-91F5-546DF448100D}.Release R27|Any CPU.Build.0 = Release R27|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

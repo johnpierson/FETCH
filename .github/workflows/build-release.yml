@@ -13,30 +13,106 @@ on:
       - master
   workflow_dispatch:
 
+# Superseded runs for the same ref are pointless; cancel all but tag builds, which publish.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+
 permissions:
-  contents: write
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: true
+  FETCH_SOLUTION: src\Fetch.sln
+  FETCH_PROJECT: src\Fetch\Fetch.csproj
+  FETCH_INSTALLER: installers\Fetch.iss
+  # Builds must never install the add-in into the runner's Revit add-ins folder.
+  FetchInstallLocal: false
 
 jobs:
-  build:
-    name: Build FETCH
+  test:
+    name: Test
     runs-on: windows-latest
-
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_NOLOGO: true
-      FETCH_PROJECT: src\Fetch\Fetch.csproj
-      FETCH_INSTALLER: installers\Fetch.iss
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup .NET SDKs
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             8.0.x
             10.0.x
+
+      # Package versions are pinned in Fetch.csproj rather than held in a lock file, because the
+      # R25 and R26 configurations share a target framework but need different versions, which a
+      # single lock file cannot express.
+      - name: Restore
+        shell: pwsh
+        run: dotnet restore $env:FETCH_SOLUTION -p:Configuration="Release R25"
+
+      - name: Run tests
+        shell: pwsh
+        run: dotnet test $env:FETCH_SOLUTION --configuration "Release R25" -p:FetchInstallLocal=false
+
+      - name: Fail on vulnerable or deprecated dependencies
+        shell: pwsh
+        run: |
+          $env:Configuration = "Release R25"
+
+          $vulnerable = dotnet list $env:FETCH_PROJECT package --vulnerable --include-transitive | Out-String
+          Write-Host $vulnerable
+          if ($vulnerable -notmatch "has no vulnerable packages") {
+            throw "Vulnerable NuGet packages were reported."
+          }
+
+          $deprecated = dotnet list $env:FETCH_PROJECT package --deprecated --include-transitive | Out-String
+          Write-Host $deprecated
+          if ($deprecated -notmatch "has no deprecated packages") {
+            Write-Warning "Deprecated NuGet packages were reported. See the output above."
+          }
+
+  build:
+    name: Build FETCH
+    runs-on: windows-latest
+    needs: test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup .NET SDKs
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Read the product version
+        id: version
+        shell: pwsh
+        run: |
+          [xml]$project = Get-Content $env:FETCH_PROJECT
+          $version = ($project.Project.PropertyGroup.Version | Where-Object { $_ }) | Select-Object -First 1
+          if (-not $version) {
+            throw "No <Version> property found in $env:FETCH_PROJECT."
+          }
+
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          Write-Host "Product version: $version"
+
+      - name: Verify the tag matches the product version
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        run: |
+          $tagVersion = "${{ github.ref_name }}".TrimStart("v")
+          $productVersion = "${{ steps.version.outputs.version }}"
+
+          if ($tagVersion -ne $productVersion) {
+            throw "Tag $tagVersion does not match the product version $productVersion in Fetch.csproj."
+          }
 
       - name: Build Revit release configurations
         shell: pwsh
@@ -48,25 +124,49 @@ jobs:
           )
 
           foreach ($configuration in $configurations) {
-            dotnet build $env:FETCH_PROJECT --configuration $configuration
+            dotnet build $env:FETCH_PROJECT --configuration $configuration -p:FetchInstallLocal=false
             if ($LASTEXITCODE -ne 0) {
               exit $LASTEXITCODE
             }
           }
 
-      - name: Install Inno Setup
+      # The runner image ships Inno Setup, so use it rather than forcing a pinned version over the
+      # top of it. The version actually used is logged, so a release can be traced back to it.
+      - name: Locate Inno Setup
+        id: inno
         shell: pwsh
-        run: choco install innosetup --no-progress --yes
+        run: |
+          function Find-Iscc {
+            @(
+              "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+              "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+            ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+          }
+
+          $iscc = Find-Iscc
+
+          if (-not $iscc) {
+            Write-Host "Inno Setup not present on the runner; installing."
+            choco install innosetup --no-progress --yes
+            if ($LASTEXITCODE -ne 0) {
+              throw "Failed to install Inno Setup."
+            }
+
+            $iscc = Find-Iscc
+          }
+
+          if (-not $iscc) {
+            throw "Inno Setup compiler not found after installation."
+          }
+
+          $version = (Get-Item $iscc).VersionInfo.ProductVersion
+          Write-Host "Using Inno Setup $version at $iscc"
+          "iscc=$iscc" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Build installer
         shell: pwsh
         run: |
-          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-          if (!(Test-Path $iscc)) {
-            throw "Inno Setup compiler not found at $iscc"
-          }
-
-          & $iscc $env:FETCH_INSTALLER
+          & "${{ steps.inno.outputs.iscc }}" "/DMyAppVersion=${{ steps.version.outputs.version }}" $env:FETCH_INSTALLER
           if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
           }
@@ -84,28 +184,62 @@ jobs:
           }
 
       - name: Upload binaries artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: FETCH-Binaries
           path: artifacts/FETCH-Binaries.zip
           if-no-files-found: error
 
       - name: Upload installer artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: FETCH-Installer
           path: artifacts/FETCH-Installer.exe
           if-no-files-found: error
 
-      - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+  release:
+    name: Publish release
+    runs-on: windows-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    # Only this job needs write access, and only it publishes.
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create or update the GitHub release
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create $env:GITHUB_REF_NAME `
-            artifacts\FETCH-Installer.exe `
-            artifacts\FETCH-Binaries.zip `
-            --repo $env:GITHUB_REPOSITORY `
-            --title $env:GITHUB_REF_NAME `
-            --generate-notes
+          $existing = gh release view $env:GITHUB_REF_NAME --repo $env:GITHUB_REPOSITORY 2>$null
+
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $env:GITHUB_REF_NAME already exists; uploading assets."
+            gh release upload $env:GITHUB_REF_NAME `
+              artifacts\FETCH-Installer.exe `
+              artifacts\FETCH-Binaries.zip `
+              --repo $env:GITHUB_REPOSITORY `
+              --clobber
+          } else {
+            gh release create $env:GITHUB_REF_NAME `
+              artifacts\FETCH-Installer.exe `
+              artifacts\FETCH-Binaries.zip `
+              --repo $env:GITHUB_REPOSITORY `
+              --title $env:GITHUB_REF_NAME `
+              --generate-notes
+          }
+
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }

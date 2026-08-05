@@ -1,145 +1,191 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System;
 using System.IO;
-using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Events;
+using Fetch.Configuration;
+using Fetch.Diagnostics;
+using Fetch.Dynamo;
+using Fetch.Sources;
+using Fetch.Sync;
 
 namespace Fetch
 {
     internal class App : IExternalApplication
     {
+        private readonly object messageLock = new object();
+
+        private UIControlledApplication uiApplication;
+        private FetchContext context;
+        private string pendingMessage;
+        private volatile bool syncFinished;
+
         public Result OnStartup(UIControlledApplication application)
         {
-            //store revit version 
-            Globals.RevitVersion = application.ControlledApplication.VersionNumber;
+            string revitVersion = application.ControlledApplication.VersionNumber;
 
-            //try to find the dynamo version and see if it is running already in a revit session with the same version
-            if (!FindDynamoVersions())
+            Log.Info($"FETCH {Assembly.GetExecutingAssembly().GetName().Version} starting for Revit {revitVersion}.");
+
+            DynamoInstallation dynamo = DynamoInstallationResolver.Resolve(
+                DynamoInstallationResolver.FindLoadedSelectorAssembly(),
+                revitVersion,
+                FetchPaths.UserRoaming);
+
+            if (dynamo == null)
             {
+                Log.Warning("No Dynamo version candidates were found; skipping package sync.");
                 return Result.Failed;
             }
 
-            VerifyDynamoLoaded();
+            Log.Info(dynamo.PackagePathExists
+                ? $"Resolved Dynamo {dynamo.Version}; package folder '{dynamo.PackagePath}'."
+                : $"No installed Dynamo package folder found; assuming Dynamo {dynamo.Version} at '{dynamo.PackagePath}'.");
 
-            //if the URL is local, then we do a copy
-            Commands.Commands.ReadIni();
-            if (Directory.Exists(Globals.PackageURL))
-            {
-                try
-                {
-                    Commands.Commands.SyncPackagesFromLocalPath();
-                    return Result.Succeeded;
-                }
-                catch (Exception ex)
-                {
-                    TaskDialog.Show("Fetch", $"Unable to sync Dynamo packages.\n\n{ex.Message}");
-                    return Result.Failed;
-                }
-            }
+            FetchSettings settings = SettingsReader.Read(FetchPaths.ExecutingDirectory, revitVersion);
+            context = new FetchContext(revitVersion, dynamo, settings);
 
-            if (!Uri.TryCreate(Globals.PackageURL, UriKind.Absolute, out Uri packageUri) ||
-                (packageUri.Scheme != Uri.UriSchemeHttp && packageUri.Scheme != Uri.UriSchemeHttps))
-            {
-                TaskDialog.Show(
-                    "Fetch",
-                    $"FetchSettings.ini must point to an existing local folder or a supported HTTP/HTTPS package source URL.\n\nSettings file:\n{Globals.SettingsPath}\n\nPath value:\n{Globals.PackageURL}");
-                return Result.Cancelled;
-            }
+            Log.Info($"Settings '{settings.SettingsPath}'; source '{settings.PackageSource}'; graph root '{settings.GraphRootPath}'.");
 
-            if (!Utilities.Utilities.CheckForInternetConnection())
-            {
-                return Result.Cancelled;
-            }
+            // The sync is network and file I/O with no Revit API calls, so it runs off the startup
+            // thread. Revit finishes launching immediately; results are reported on the first idle.
+            StartBackgroundSync(application);
 
-            try
-            {
-                Commands.Commands.DownloadAndUnzipPackages(packageUri);
-                return Result.Succeeded;
-            }
-            catch (Exception ex)
-            {
-                TaskDialog.Show("Fetch", $"Unable to download Dynamo packages.\n\n{ex.Message}");
-                return Result.Failed;
-            }
+            return Result.Succeeded;
         }
 
         public Result OnShutdown(UIControlledApplication application)
         {
+            DetachIdling();
             return Result.Succeeded;
         }
 
-        public bool FindDynamoVersions()
+        private void StartBackgroundSync(UIControlledApplication application)
         {
-            var dynamoRevit = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.FullName.Contains("DynamoRevitVersionSelector"));
+            uiApplication = application;
+            application.Idling += OnIdling;
 
-            List<Version> dynamoVersions = DynamoVersionResolver
-                .GetVersionCandidates(dynamoRevit, Globals.RevitVersion)
-                .ToList();
-            if (dynamoVersions.Count == 0)
+            Task.Run(() =>
             {
-                return false;
-            }
-
-            foreach (Version dynamoVersion in dynamoVersions)
-            {
-                foreach (string packagePath in DynamoVersionResolver.GetPackagePathCandidates(
-                    dynamoVersion,
-                    Globals.UserRoaming,
-                    Globals.RevitVersion))
+                try
                 {
-                    if (!Directory.Exists(packagePath))
-                    {
-                        continue;
-                    }
-
-                    Globals.DynamoVersion = dynamoVersion;
-                    Globals.DefaultDynamoPackagePath = packagePath;
-                    return true;
+                    RunSync();
                 }
+                catch (Exception ex)
+                {
+                    // Nothing may escape this task: an unobserved exception here would be raised on
+                    // a finalizer thread rather than reported to the user.
+                    Log.Error("Package sync failed.", ex);
+
+                    if (SyncFailureClassifier.IsLikelyOffline(ex))
+                    {
+                        // Starting Revit away from the network is routine; do not nag about it.
+                        Log.Warning("The package source could not be reached; leaving the installed packages in place.");
+                    }
+                    else
+                    {
+                        SetPendingMessage(
+                            $"Dynamo packages were not updated.\n\n{ex.Message}\n\nSettings file:\n{context.Settings.SettingsPath}\n\nThere is more detail in:\n{Log.FilePath}");
+                    }
+                }
+                finally
+                {
+                    syncFinished = true;
+                }
+            });
+        }
+
+        private void RunSync()
+        {
+            // Checked here rather than at startup so the answer reflects the moment the sync would
+            // actually touch the folder.
+            if (DynamoSessionDetector.IsDynamoLoadedInAnotherSession(context.RevitVersion))
+            {
+                Log.Warning("Another Revit session has Dynamo loaded; skipping the sync to avoid replacing package files that are in use.");
+                SetPendingMessage(
+                    "Dynamo packages were not updated because another Revit session currently has Dynamo open, "
+                    + "and its package files are in use.\n\nClose the other Revit session and restart Revit to update the packages.");
+                return;
             }
 
-            Globals.DynamoVersion = dynamoVersions[0];
-            Globals.DefaultDynamoPackagePath = DynamoVersionResolver
-                .GetPackagePathCandidates(
-                    Globals.DynamoVersion,
-                    Globals.UserRoaming,
-                    Globals.RevitVersion)
-                .First();
+            SyncService syncService = new SyncService(context);
+            string packageSource = context.Settings.PackageSource;
 
-            return true;
+            if (Directory.Exists(packageSource))
+            {
+                syncService.SyncFromFolder(packageSource);
+                Log.Info("Local package sync completed.");
+                return;
+            }
+
+            if (!PackageSourcePolicy.TryValidateUrl(
+                    packageSource,
+                    context.Settings.AllowInsecureHttp,
+                    out Uri packageUri,
+                    out string packageSourceError))
+            {
+                Log.Warning($"Package source '{packageSource}' rejected: {packageSourceError}");
+                SetPendingMessage(
+                    $"{packageSourceError}\n\nSettings file:\n{context.Settings.SettingsPath}\n\nPath value:\n{packageSource}");
+                return;
+            }
+
+            syncService.SyncFromUrl(packageUri);
+            Log.Info("Package download and sync completed.");
+        }
+
+        private void SetPendingMessage(string message)
+        {
+            lock (messageLock)
+            {
+                pendingMessage = message;
+            }
         }
 
         /// <summary>
-        /// Gets all processes running on the machine then checks if they are "Revit" based. Then if it does find any it checks if Dynamo dll's are in memory.
-        /// If yes it changes Global "IsDynamoInMemory" to True
+        /// Reports the outcome once Revit is idle. A successful sync says nothing at all; only a
+        /// problem the user can act on raises a dialog, and only once.
         /// </summary>
-        public static void VerifyDynamoLoaded()
+        private void OnIdling(object sender, IdlingEventArgs e)
         {
-            List<bool> tempBoolList = new List<bool>();
+            if (!syncFinished)
+            {
+                return;
+            }
 
-            foreach (Process process in Process.GetProcessesByName("revit"))
+            string message;
+            lock (messageLock)
             {
-                if (process.MainModule.FileName.Contains(Globals.RevitVersion))
-                {
-                    foreach (ProcessModule module in process.Modules)
-                    {
-                        if (module.FileName.ToLower().Contains("dynamo"))
-                        {
-                            tempBoolList.Add(true);
-                        }
-                    }
-                }
+                message = pendingMessage;
+                pendingMessage = null;
             }
-            if (tempBoolList.Count() > 0)
+
+            DetachIdling();
+
+            if (!string.IsNullOrEmpty(message))
             {
-                Globals.IsDynamoInMemory = true;
-            }
-            else
-            {
-                Globals.IsDynamoInMemory = false;
+                TaskDialog.Show("Fetch", message);
             }
         }
 
+        private void DetachIdling()
+        {
+            UIControlledApplication application = uiApplication;
+            if (application == null)
+            {
+                return;
+            }
+
+            uiApplication = null;
+
+            try
+            {
+                application.Idling -= OnIdling;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning($"Could not detach the idling handler: {ex.Message}");
+            }
+        }
     }
 }
